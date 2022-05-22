@@ -13,7 +13,7 @@ class ProjectRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,18 @@ class ProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required',
+            'slug' => 'required',
+            'balance' => 'required',
         ];
     }
+
+    public function messages()
+    {
+        return $messages = [
+        'name.required' => 'Значение поля :attribute не может быть пустым',
+        'slug.required' => 'Значение поля :attribute не может быть пустым',
+        'balance.required' => 'Значение поля :attribute не может быть пустым',
+        ];
+}
 }

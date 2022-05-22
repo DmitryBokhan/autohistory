@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Models\Project;
+
+use Illuminate\Http\Request;
+use App\Http\Requests\ProjectRequest; //в этом классе происходит валидация
 
 class ProjectController extends Controller
 {
@@ -24,13 +25,15 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProjectRequest $request)
     {
+        //валидация выне    сена в объект ProjectRequest
         // $request->validate([
         //     'name' => 'required',
         //     'slug' => 'required',
         //     'price' => 'required'
         // ])
+
         return Project::create($request->all());
     }
 
