@@ -23,8 +23,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+
+
+//-------------Вариант реализации маршрутов---(но мы используем resource вместо этого варианта)
 //Получить все проекты
-Route::get('/project', [ProjectController::class, 'index']);
+//Route::get('/project', [ProjectController::class, 'index']);
 
 //создать новый проект
-Route::post('/project', [ProjectController::class, 'store']);
+//Route::post('/project', [ProjectController::class, 'store']);
+
+//Получить инф о проектt по id
+//Route::get('/project/{id}', [ProjectController::class, 'show']);
+//---------------------------------------------------------------------------------------------
+
+
+Route::resource('project', ProjectController::class);
+Route::get('/project/search/{name}', [ProjectController::class, 'search']);

@@ -45,7 +45,8 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        //
+
+        return Project::find($id);
     }
 
     /**
@@ -57,7 +58,9 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $project = Project::find($id);
+        $project->update($request->all());
+        return $project;
     }
 
     /**
@@ -68,6 +71,17 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return Project::destroy($id);
+    }
+
+    /**
+     * Search for a name
+     *
+     * @param  string  $name
+     * @return \Illuminate\Http\Response
+     */
+    public function search($name)
+    {
+        return Project::where('name', 'like', '%'.$name.'%')->get();
     }
 }
