@@ -37,5 +37,5 @@ class ProjectRequest extends FormRequest
         'slug.required' => 'Значение поля :attribute не может быть пустым',
         'balance.required' => 'Значение поля :attribute не может быть пустым',
         ];
-}
+    }
 }
