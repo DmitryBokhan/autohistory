@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Project;
+
 class ProjectController extends Controller
 {
     /**
@@ -13,7 +15,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        return Project::all();
     }
 
     /**
@@ -24,7 +26,12 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $request->validate([
+        //     'name' => 'required',
+        //     'slug' => 'required',
+        //     'price' => 'required'
+        // ])
+        return Project::create($request->all());
     }
 
     /**

@@ -2,8 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProjectController;
 
-use App\Models\Project;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,16 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/project', function(){
-    return Project::all();
-});
+//Получить все проекты
+Route::get('/project', [ProjectController::class, 'index']);
 
-
-Route::post('/project', function(){
-    return Project::create([
-        'name' => 'Project One',
-        'slug' => 'project-one',
-        'description' => 'This is project one',
-        'balance' => '1000000.00'
-    ]);
-});
+//создать новый проект
+Route::post('/project', [ProjectController::class, 'store']);
