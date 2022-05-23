@@ -36,15 +36,21 @@
                             <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                             <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                         @else
+                        @can('user-list')
                             <li><a class="nav-link" href="{{ route('users.index') }}">Manage Users</a></li>
+                        @endcan
+                        @can('role-list')
                             <li><a class="nav-link" href="{{ route('roles.index') }}">Manage Role</a></li>
+                        @endcan
+                        @can('project-list')
                             <li><a class="nav-link" href="{{ route('projects.index') }}">Manage Project</a></li>
+                        @endcan
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="dropdownMenuLink" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                         document.getElementById('logout-form').submit();">
@@ -54,7 +60,7 @@
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
-                                </div>
+                                </ul>
                             </li>
                         @endguest
                     </ul>

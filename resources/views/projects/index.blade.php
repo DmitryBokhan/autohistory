@@ -8,7 +8,7 @@
             </div>
             <div class="pull-right">
                 @can('project-create')
-                <a class="btn btn-success" href="{{ route('projects.create') }}"> Добавить новый проект</a>
+                <a class="btn btn-success mb-2" href="{{ route('projects.create') }}"> Добавить новый проект</a>
                 @endcan
             </div>
         </div>
@@ -24,21 +24,24 @@
         <tr>
             <th>No</th>
             <th>Name</th>
-            <th>Details</th>
+            <th>Description</th>
+            <th>Balance</th>
             <th width="280px">Action</th>
         </tr>
 	    @foreach ($projects as $project)
 	    <tr>
 	        <td>{{ ++$i }}</td>
 	        <td>{{ $project->name }}</td>
-	        <td>{{ $project->detail }}</td>
+	        <td>{{ $project->description }}</td>
+            <td>{{ $project->balance }}</td>
 	        <td>
                 <form action="{{ route('projects.destroy',$project->id) }}" method="POST">
+                    @can('project-show')
                     <a class="btn btn-info" href="{{ route('projects.show',$project->id) }}">Show</a>
+                    @endcan
                     @can('project-edit')
                     <a class="btn btn-primary" href="{{ route('projects.edit',$project->id) }}">Edit</a>
                     @endcan
-
                     @csrf
                     @method('DELETE')
                     @can('project-delete')
