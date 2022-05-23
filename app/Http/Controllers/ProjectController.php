@@ -3,85 +3,117 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-
 use Illuminate\Http\Request;
-use App\Http\Requests\ProjectRequest; //в этом классе происходит валидация
 
 class ProjectController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Отобразить список ресурсов.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    function __construct()
+    {
+         $this->middleware('permission:project-list|project-create|project-edit|project-delete', ['only' => ['index','show']]);
+         $this->middleware('permission:project-create', ['only' => ['create','store']]);
+         $this->middleware('permission:project-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:project-delete', ['only' => ['destroy']]);
+    }
+    /**
+     * Отобразить список ресурсов.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return Project::all();
+        $projects = Project::latest()->paginate(5);
+        return view('projects.index',compact('projects'))
+            ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Отобразить форму для создания нового ресурса.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('projects.create');
+    }
+
+    /**
+     * Поместить только что созданный ресурс в хранилище.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProjectRequest $request)
+    public function store(Request $request)
     {
-        //валидация выне    сена в объект ProjectRequest
-        // $request->validate([
-        //     'name' => 'required',
-        //     'slug' => 'required',
-        //     'price' => 'required'
-        // ])
+        request()->validate([
+            'name' => 'required',
+            'detail' => 'required',
+        ]);
 
-        return Project::create($request->all());
+        Project::create($request->all());
+
+        return redirect()->route('projects.index')
+                        ->with('success','Project created successfully.');
     }
 
     /**
-     * Display the specified resource.
+     * Отобразить указанный ресурс.
      *
-     * @param  int  $id
+     * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Project $project)
     {
-
-        return Project::find($id);
+        return view('projects.show',compact('project'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Отобразить форму для редактирования указанного
+     * ресурса.
+     *
+     * @param  \App\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Project $project)
+    {
+        return view('projects.edit',compact('project'));
+    }
+
+    /**
+     * Обновить указанный ресурс в хранилище.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Project $project)
     {
-        $project = Project::find($id);
+         request()->validate([
+            'name' => 'required',
+            'detail' => 'required',
+        ]);
+
         $project->update($request->all());
-        return $project;
+
+        return redirect()->route('projects.index')
+                        ->with('success','Project updated successfully');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Удалить указанный ресурс из хранилища.
      *
-     * @param  int  $id
+     * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Project $project)
     {
-        return Project::destroy($id);
-    }
+        $project->delete();
 
-    /**
-     * Search for a name
-     *
-     * @param  string  $name
-     * @return \Illuminate\Http\Response
-     */
-    public function search($name)
-    {
-        return Project::where('name', 'like', '%'.$name.'%')->get();
+        return redirect()->route('projects.index')
+                        ->with('success','Project deleted successfully');
     }
 }
