@@ -2,8 +2,8 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -37,5 +37,14 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+
+        //ПРИМЕР ПЕРЕОПРЕДЕЛЕНИЯ ИСКЛЮЧЕНИЯ
+        // $this->renderable(function (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $e, $request) {
+        //     return response()->json([
+        //         'responseMessage' => 'Доступ запрещен.',
+        //         'responseStatus'  => 403,
+        //     ]);
+        // });
     }
 }

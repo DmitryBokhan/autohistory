@@ -54,7 +54,9 @@ Route::get('/project/search/{name}', [ApiProjectController::class, 'search']);
 
 //Зашишенные маршруты
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/project', [ApiProjectController::class, 'store']);
+   Route::group(['middleware' => ['can:project-create']], function(){
+        Route::post('/project', [ApiProjectController::class, 'store']);
+    });
     Route::put('/project/{id}', [ApiProjectController::class, 'update']);
     Route::delete('/project/{id}', [ApiProjectController::class, 'destroy']);
     Route::post('/logout', [AuthController::class, 'logout']);

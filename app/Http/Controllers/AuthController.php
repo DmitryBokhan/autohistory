@@ -1,4 +1,9 @@
 <?php
+/**
+ *  Аутентификация через API
+ */
+
+
 
 namespace App\Http\Controllers;
 
