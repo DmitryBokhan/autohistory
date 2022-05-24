@@ -12,6 +12,6 @@ class Project extends Model
 
     //поля таблицы доступные для редактирования
     protected $fillable = [
-        'name', 'slug', 'description', 'balance'
+        'name', 'slug', 'description', 'balance', 'is_active'
     ];
 }

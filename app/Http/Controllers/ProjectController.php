@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use Illuminate\Http\Request;
-
 class ProjectController extends Controller
 {
     /**
@@ -95,9 +94,13 @@ class ProjectController extends Controller
          request()->validate([
             'name' => 'required',
             'balance' => 'required',
+            'is_active' =>'required',
         ]);
 
-        $project->update($request->all());
+
+        $slug = \Str::slug($request->name);
+
+        $project->update(array_merge($request->all(), ['slug' => $slug]));
 
         return redirect()->route('projects.index')
                         ->with('success','Project updated successfully');

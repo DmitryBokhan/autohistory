@@ -46,7 +46,16 @@
 		            <input type="text" class="form-control" name="balance" value="{{ $project->balance }}" placeholder="Balance">
 		        </div>
 		    </div>
-		    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+            <div class="col-xs-12 col-sm-12 col-md-12 mt-2">
+                <div class="form-group">
+                    <strong>Active:</strong>
+                    <select class="form-select" aria-label="Default select example"  name="is_active">
+                        <option {{ $project->is_active == false ?'selected': '' }} value="0">false</option>
+                        <option {{ $project->is_active == true ?'selected': '' }} value="1">true</option>
+                    </select>
+                </div>
+            </div>
+		    <div class="col-xs-12 col-sm-12 col-md-12 text-center mt-2">
 		      <button type="submit" class="btn btn-primary">Submit</button>
 		    </div>
 		</div>
