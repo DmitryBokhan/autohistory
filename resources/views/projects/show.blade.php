@@ -21,8 +21,20 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
-                <strong>Details:</strong>
-                {{ $project->detail }}
+                <strong>Description:</strong>
+                {{ $project->description }}
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
+                <strong>Balance:</strong>
+                {{ $project->balance }}
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
+                <strong>Active:</strong>
+                {{ $project->is_active ? 'true' : "false" }}
             </div>
         </div>
     </div>

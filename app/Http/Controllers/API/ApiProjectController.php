@@ -10,6 +10,14 @@ use App\Http\Requests\ProjectRequest; //в этом классе происхо�
 
 class ApiProjectController extends Controller
 {
+
+    function __construct()
+    {
+         $this->middleware('permission:project-list|project-create|project-edit|project-delete', ['only' => ['index','show']]);
+         $this->middleware('permission:project-create', ['only' => ['create','store']]);
+         $this->middleware('permission:project-edit', ['only' => ['edit','update', 'add_balance']]);
+         $this->middleware('permission:project-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -29,7 +37,7 @@ class ApiProjectController extends Controller
      */
     public function store(ProjectRequest $request)
     {
-        //валидация выне    сена в объект ProjectRequest
+        //валидация вынесена в объект ProjectRequest
         // $request->validate([
         //     'name' => 'required',
         //     'slug' => 'required',
@@ -85,5 +93,23 @@ class ApiProjectController extends Controller
     public function search($name)
     {
         return Project::where('name', 'like', '%'.$name.'%')->get();
+    }
+
+    public function add_balance(Request $request, $id)
+    {
+        $request->validate([
+            'sum' => 'required|regex:/^[0-9]+$/',
+        ]);
+
+        $project = Project::find($id);
+        $balance = $project->balance += $request->get('sum');
+        $project->update(['balence' => $balance]);
+
+        $response = [
+            'message' => 'Баланс успешно увеличен'
+        ];
+
+        return response($response, 201);
+
     }
 }

@@ -54,15 +54,9 @@ Route::get('/project/search/{name}', [ApiProjectController::class, 'search']);
 
 //Зашишенные маршруты
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::group(['middleware' => ['can:project-create']], function(){
-        Route::post('/project', [ApiProjectController::class, 'store']);
-    });
-    Route::group(['middleware' => ['can:project-update']], function(){
-        Route::put('/project/{id}', [ApiProjectController::class, 'update']);
-    });
-    Route::group(['middleware' => ['can:project-delete']], function(){
-        Route::delete('/project/{id}', [ApiProjectController::class, 'destroy']);
-    });
+    Route::post('/project', [ApiProjectController::class, 'store']);
+    Route::put('/project/{id}', [ApiProjectController::class, 'update']);
+    Route::delete('/project/{id}', [ApiProjectController::class, 'destroy']);
     Route::post('/logout', [AuthController::class, 'logout']);
-
+    Route::put('/project/{id}/add_balance/', [ApiProjectController::class, 'add_balance']); //добавить сумму к текущему балансу
 });

@@ -36,9 +36,9 @@
             <td>{{ $project->balance }}</td>
 	        <td>
                 <form action="{{ route('projects.destroy',$project->id) }}" method="POST">
-                    @can('project-show')
+
                     <a class="btn btn-info" href="{{ route('projects.show',$project->id) }}">Show</a>
-                    @endcan
+
                     @can('project-edit')
                     <a class="btn btn-primary" href="{{ route('projects.edit',$project->id) }}">Edit</a>
                     @endcan
