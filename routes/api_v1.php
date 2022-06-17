@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\API\ApiProjectController;
+use App\Http\Controllers\API\V1\ApiProjectController;
 
 
 
@@ -47,13 +47,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //Публичные маршруты
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/project', [ApiProjectController::class, 'index']);
-Route::get('/project/{id}', [ApiProjectController::class, 'show']);
-Route::get('/project/search/{name}', [ApiProjectController::class, 'search']);
+
+
 
 
 //Зашишенные маршруты
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/project', [ApiProjectController::class, 'index']);
+    Route::get('/project/{id}', [ApiProjectController::class, 'show']);
+    Route::get('/project/search/{name}', [ApiProjectController::class, 'search']);
     Route::post('/project', [ApiProjectController::class, 'store']);
     Route::put('/project/{id}', [ApiProjectController::class, 'update']);
     Route::delete('/project/{id}', [ApiProjectController::class, 'destroy']);
