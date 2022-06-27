@@ -1,6 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.dashboard_layout')
+
+@section('title', 'Редактирование роли')
 
 @section('content')
+
 <div class="row">
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
@@ -11,7 +14,6 @@
         </div>
     </div>
 </div>
-
 @if (count($errors) > 0)
     <div class="alert alert-danger">
         <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -22,7 +24,6 @@
         </ul>
     </div>
 @endif
-
 {!! Form::model($role, ['method' => 'PATCH','route' => ['roles.update', $role->id]]) !!}
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12">

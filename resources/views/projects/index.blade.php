@@ -1,6 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.dashboard_layout')
+
+@section('title', 'Проекты')
 
 @section('content')
+
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">

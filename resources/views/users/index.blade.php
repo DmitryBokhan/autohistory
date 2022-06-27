@@ -1,6 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.dashboard_layout')
+
+@section('title', 'Пользователи')
 
 @section('content')
+
 <div class="row">
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
@@ -13,13 +16,11 @@
         @endcan
     </div>
 </div>
-
 @if ($message = Session::get('success'))
 <div class="alert alert-success">
     <p>{{ $message }}</p>
 </div>
 @endif
-
 <table class="table table-bordered">
 <tr>
     <th>No</th>
@@ -47,14 +48,13 @@
         @endcan
         @can('user-delete')
         {!! Form::open(['method' => 'DELETE','route' => ['users.destroy', $user->id],'style'=>'display:inline']) !!}
-            {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+            {!! Form::submit('Delete', ['class' => 'btn btn-danger delete-btn']) !!}
         {!! Form::close() !!}
         @endcan
     </td>
 </tr>
 @endforeach
 </table>
-
 {!! $data->render() !!}
 
 

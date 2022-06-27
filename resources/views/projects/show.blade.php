@@ -1,6 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.dashboard_layout')
+
+@section('title', 'Профиль проекта')
 
 @section('content')
+
+<div class="content">
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
@@ -38,4 +42,5 @@
             </div>
         </div>
     </div>
+</div>
 @endsection

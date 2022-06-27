@@ -27,6 +27,10 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::get('/panel', function(){
+    return view('dashboard.home.index');
+});
+
 
 
 Route::group(['middleware' => ['auth']], function() {
