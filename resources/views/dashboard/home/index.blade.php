@@ -40,12 +40,12 @@
            <div class="inner">
              <h3>0</h3>
 
-             <p>Посты</p>
+             <p>Позиции</p>
            </div>
            <div class="icon">
-             <i class="ion ion-bag"></i>
+             <i class="fas fa-car"></i>
            </div>
-           <a href="#" class="small-box-footer">Все статьи<i class="fas fa-arrow-circle-right"></i></a>
+           <a href="#" class="small-box-footer">Список позиций<i class="fas fa-arrow-circle-right "></i></a>
          </div>
        </div>
        <!-- ./col -->
@@ -54,13 +54,12 @@
          <div class="small-box bg-success">
            <div class="inner">
              <h3>0</h3>
-
-             <p>Категории</p>
+             <p>Мои позиции</p>
            </div>
            <div class="icon">
              <i class="ion ion-stats-bars"></i>
            </div>
-           <a href="#" class="small-box-footer">Все категории <i class="fas fa-arrow-circle-right"></i></a>
+           <a href="#" class="small-box-footer">Список моих позиций <i class="fas fa-arrow-circle-right"></i></a>
          </div>
        </div>
        <!-- ./col -->
@@ -68,14 +67,13 @@
          <!-- small box -->
          <div class="small-box bg-warning">
            <div class="inner">
-             <h3>44</h3>
-
-             <p>User Registrations</p>
+             <h3>{{ $user_count }}</h3>
+             <p>Пользователи</p>
            </div>
            <div class="icon">
              <i class="ion ion-person-add"></i>
            </div>
-           <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+           <a href="{{ route('users.index') }}" class="small-box-footer">Список пользователей <i class="fas fa-arrow-circle-right"></i></a>
          </div>
        </div>
        <!-- ./col -->
@@ -83,14 +81,16 @@
          <!-- small box -->
          <div class="small-box bg-danger">
            <div class="inner">
-             <h3>65</h3>
+             <h3>1 300 545
+              <sup style="font-size: 20px"> ₽</sup>
+             </h3>
 
-             <p>Unique Visitors</p>
+             <p>Финансы</p>
            </div>
            <div class="icon">
              <i class="ion ion-pie-graph"></i>
            </div>
-           <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+           <a href="#" class="small-box-footer">Мои финансы <i class="fas fa-arrow-circle-right"></i></a>
          </div>
        </div>
        <!-- ./col -->

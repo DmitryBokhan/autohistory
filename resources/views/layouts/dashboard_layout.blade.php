@@ -74,19 +74,19 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-newspaper"></i>
               <p>
-                Проекты
+                Позиции
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{ route('projects.index') }}" class="nav-link">
-                  <p>Все проекты</p>
+                  <p>Все позиции</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ route('projects.create') }}" class="nav-link">
-                  <p>Добавить проект</p>
+                  <p>Добавить позицию</p>
                 </a>
               </li>
             </ul>
