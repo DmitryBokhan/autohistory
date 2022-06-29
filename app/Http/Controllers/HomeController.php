@@ -27,4 +27,5 @@ class HomeController extends Controller
         $user = User::get();
         return view('dashboard.home.index', ['user_count' => $user->count()]);
     }
+
 }

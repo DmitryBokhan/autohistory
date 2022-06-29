@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\PositionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +38,14 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('users', UserController::class);
     Route::resource('projects', ProjectController::class);
 });
+
+
+Route::get('/create_position', function(){
+    return view('positions.create');
+});
+
+
+
+Route::get('/create_position', [PositionController::class, 'create'])->name('create_position');
+
+Route::post('/cars_ajax', [PositionController::class, 'cars_ajax']);

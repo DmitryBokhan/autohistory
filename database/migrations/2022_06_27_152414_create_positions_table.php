@@ -23,7 +23,7 @@ class CreatePositionsTable extends Migration
             $table->string('car_number');
             $table->date('date_purchase');
             $table->date('date_sale'); //дата покупки позиции
-            $table->integer('price_pruchase'); //стоимоть покупки
+            $table->integer('price_pruchase'); //стоимость покупки
             $table->unsignedInteger('city_id'); //город покупки автомобиля
             $table->integer('delivery_cost'); //затраты на доставку
             $table->date('start_preparation'); //дата начала подготовки
