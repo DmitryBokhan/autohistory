@@ -32,7 +32,7 @@ Route::get('/panel', function(){
 });
 
 
-
+//управление пользователями
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
@@ -40,12 +40,11 @@ Route::group(['middleware' => ['auth']], function() {
 });
 
 
-Route::get('/create_position', function(){
-    return view('positions.create');
-});
-
-
-
 Route::get('/create_position', [PositionController::class, 'create'])->name('create_position');
 
 Route::post('/cars_ajax', [PositionController::class, 'cars_ajax']);
+
+//временные маршруты для тестирования 
+Route::get('/create_investor', function () {
+    return view('investors.create');
+});

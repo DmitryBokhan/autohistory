@@ -42,7 +42,7 @@ class PositionController extends Controller
             }
         }
 
-        if(isset($request->engine_type)){
+        if(isset($request->engine_type) && $request->engine_type != 'электро'){
             $engine_volumes = DB::table('carsbase')
                 ->distinct()
                 ->where('mark', $request->mark_change)

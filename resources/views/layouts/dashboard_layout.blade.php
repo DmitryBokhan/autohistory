@@ -134,7 +134,7 @@
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-newspaper"></i>
+              <i class="nav-icon fas fa-car"></i>
               <p>
                 Позиции
                 <i class="right fas fa-angle-left"></i>
@@ -149,6 +149,48 @@
               <li class="nav-item">
                 <a href="{{ route('create_position') }}" class="nav-link">
                   <p>Добавить позицию</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-briefcase"></i>
+              <p>
+                Инвесторы
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p>Инвесторы</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/create_investor" class="nav-link">
+                  <p>Добавить инвестора</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-ruble-sign"></i>
+              <p>
+                Финансы
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p>Приход</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p>Расход</p>
                 </a>
               </li>
             </ul>

@@ -50,18 +50,6 @@
       </div>
       <div class="col-xs-12 col-sm-12 col-md-12">
          <div class="form-group">
-            <label for="years">Год выпуска</label>
-            <input type="text" name="years" class="form-control" placeholder="Год выпуска">
-         </div>
-      </div>
-      <div class="col-xs-12 col-sm-12 col-md-12">
-         <div class="form-group">
-            <strong>Гос. номер:</strong>
-            <input type="text" name="gos_num" class="form-control" placeholder="A000AA00">
-         </div>
-      </div>
-      <div class="col-xs-12 col-sm-12 col-md-12">
-         <div class="form-group">
             <label for="engine_types">Тип двигателя</label>
             <select class="form-control" id="engine_types" aria-label="Тип двигателя">
                <option selected>Выберите тип ДВС</option>
@@ -82,6 +70,18 @@
             <select class="form-control" id="transmission" aria-label="Тип трансмиссии">
                <option selected>Выберите тип КПП</option>
             </select>
+         </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12">
+         <div class="form-group">
+            <label for="years">Год выпуска</label>
+            <input type="text" name="years" class="form-control" placeholder="Год выпуска">
+         </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12">
+         <div class="form-group">
+            <strong>Гос. номер:</strong>
+            <input type="text" name="gos_num" class="form-control" placeholder="A000AA00">
          </div>
       </div>
       <div class="input-group col-xs-2 col-sm-2 col-md-2">
