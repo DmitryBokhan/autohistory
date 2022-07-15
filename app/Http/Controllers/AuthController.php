@@ -8,6 +8,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\AuthUserRequest;
 use App\Http\Requests\LoginUserRequest;
@@ -28,6 +29,9 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token,
         ];
+
+        //Назначим роль User при регистрации пользователя
+        $user->assignRole('User');
 
         return response($response, 201);
     }
