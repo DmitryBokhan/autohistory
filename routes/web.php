@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -20,7 +21,11 @@ use App\Http\Controllers\PositionController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if(Auth::user()){
+        return redirect('/login');
+    }else{
+        return redirect('/home');
+    }
 });
 
 Auth::routes();
@@ -32,19 +37,40 @@ Route::get('/panel', function(){
 });
 
 
-//управление пользователями
+
 Route::group(['middleware' => ['auth']], function() {
+    //управление пользователями
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
+
+
     Route::resource('projects', ProjectController::class);
+
+    Route::get('/create_position', [PositionController::class, 'create'])->name('create_position');
+    Route::post('/create_position', [PositionController::class, 'store'])->name('create_position.store');
+    Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');
+
 });
 
 
-Route::get('/create_position', [PositionController::class, 'create'])->name('create_position');
+
 
 Route::post('/cars_ajax', [PositionController::class, 'cars_ajax']);
+Route::post('/city_ajax', [PositionController::class, 'city_ajax']);
 
-//временные маршруты для тестирования 
+//временные маршруты для тестирования
 Route::get('/create_investor', function () {
     return view('investors.create');
+});
+
+
+Route::get("/test", function(){
+
+    $user = auth()->user();
+    dump($user);
+    $permissions = $user->getAllPermissions();
+    dump($permissions);
+   //dd(Auth::user());
+
+   dd($user->hasPermissionTo('role-list'));
 });

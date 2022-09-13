@@ -36,11 +36,11 @@
      <div class="row">
        <div class="col-lg-3 col-6">
          <!-- small box -->
-         <div class="small-box bg-info">
+         <div class="small-box bg-success">
            <div class="inner">
-             <h3>0</h3>
+             <h3>{{App\Models\Position::where('position_status_id', 2)->get()->count()}}</h3>
 
-             <p>Позиции</p>
+             <p>Позиции в продаже</p>
            </div>
            <div class="icon">
              <i class="fas fa-car"></i>
@@ -48,10 +48,23 @@
            <a href="#" class="small-box-footer">Список позиций<i class="fas fa-arrow-circle-right "></i></a>
          </div>
        </div>
+         <div class="col-lg-3 col-6">
+             <div class="small-box bg-info">
+                 <div class="inner">
+                     <h3>{{App\Models\Position::where('position_status_id', 1)->get()->count()}}</h3>
+
+                     <p>Позиции в подготовке</p>
+                 </div>
+                 <div class="icon">
+                     <i class="fas fa-wrench"></i>
+                 </div>
+                 <a href="#" class="small-box-footer">Список позиций<i class="fas fa-arrow-circle-right "></i></a>
+             </div>
+         </div>
        <!-- ./col -->
        <div class="col-lg-3 col-6">
          <!-- small box -->
-         <div class="small-box bg-success">
+         <div class="small-box bg-secondary">
            <div class="inner">
              <h3>0</h3>
              <p>Мои позиции</p>

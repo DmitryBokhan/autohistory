@@ -1,5 +1,5 @@
 $(document).ready(function () {
-   //подсветка выбранного раздела меню 
+   //подсветка выбранного раздела меню
    $(".nav-treeview .nav-link, .nav-link").each(function () {
       var location2 = window.location.protocol + '//' + window.location.host + window.location.pathname;
       var link = this.href;
@@ -10,7 +10,7 @@ $(document).ready(function () {
       }
    });
 
-   //окно подтверждения действия на удаление 
+   //окно подтверждения действия на удаление
    $('.delete-btn').click(function () {
       var res = confirm('Подтвердите действия');
       if (!res) {
@@ -24,7 +24,7 @@ $(document).ready(function () {
    })
 
 
-   // AJAX ДЛЯ ВЫБОРА МОДЕЛИ АВТОМОБИЛЯ 
+   // AJAX ДЛЯ ВЫБОРА МОДЕЛИ АВТОМОБИЛЯ
    //выбор марки и заполнение списка моделей
    $("#marks").on('change', function () {
       $("#engine_volume").attr("disabled", false);
@@ -124,4 +124,45 @@ $(document).ready(function () {
          }
       })
    })
+
+    // AJAX ДЛЯ ВЫБОРА ГОРОДА ПОКУПКИ АВТОМОБИЛЯ
+    //выбор страны и заполнение списка регионов
+    $("#countries").on('change', function () {
+        $("#regions").attr("disabled", false);
+        $('#cities').html('<option selected>Выберите город</option>'),
+        $("#cities").attr("disabled", "disabled")
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $("input[name='_token']").val()
+            }
+        });
+        $.ajax({
+            url: "/city_ajax",
+            method: "POST",
+            data: { country: $(this).val() },
+            success: function (data) {
+                $('#regions').html(data)
+
+            }
+        })
+    })
+
+    //выбор региона и заполнение списка городов
+    $("#regions").on('change', function () {
+        $("#cities").attr("disabled", false);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $("input[name='_token']").val()
+            }
+        });
+        $.ajax({
+            url: "/city_ajax",
+            method: "POST",
+            data: { region: $(this).val() },
+            success: function (data) {
+                $('#cities').html(data)
+            }
+        })
+    })
+
 })

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePositionsTable extends Migration
+class DropPositionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,6 +12,16 @@ class CreatePositionsTable extends Migration
      * @return void
      */
     public function up()
+    {
+        Schema::dropIfExists('positions');
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
     {
         Schema::create('positions', function (Blueprint $table) {
             $table->id();
@@ -32,15 +42,5 @@ class CreatePositionsTable extends Migration
             $table->integer('additional_cost_fact'); //фактическая сумма продажи позиции
             $table->timestamps();
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('positions');
     }
 }

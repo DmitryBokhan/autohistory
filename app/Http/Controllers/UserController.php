@@ -74,7 +74,6 @@ class UserController extends Controller
 
     /**
      * Отобразить форму для редактирования указанного
-
      * ресурса.
      *
      * @param  int  $id

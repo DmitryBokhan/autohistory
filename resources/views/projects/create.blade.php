@@ -38,10 +38,26 @@
 		    </div>
 		    <div class="col-xs-12 col-sm-12 col-md-12">
 		        <div class="form-group">
-		            <strong>Detail:</strong>
-		            <textarea class="form-control" style="height:150px" name="detail" placeholder="Detail"></textarea>
+		            <strong>Description:</strong>
+		            <textarea class="form-control" style="height:150px" name="description" placeholder="Description"></textarea>
 		        </div>
 		    </div>
+             <div class="col-xs-12 col-sm-12 col-md-12">
+                 <div class="form-group">
+                     <strong>Balance:</strong>
+                     <input type="text" class="form-control" name="balance" placeholder="Balance">
+                 </div>
+             </div>
+             <div class="col-xs-12 col-sm-12 col-md-12 mt-2">
+                 <div class="form-group">
+                     <strong>Active:</strong>
+                     <select class="form-select" aria-label="Default select example"  name="is_active">
+                         <option value="0">false</option>
+                         <option selected value="1">true</option>
+                     </select>
+                 </div>
+             </div>
+
 		    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
 		            <button type="submit" class="btn btn-primary">Submit</button>
 		    </div>

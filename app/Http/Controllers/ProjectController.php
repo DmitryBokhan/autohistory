@@ -53,7 +53,9 @@ class ProjectController extends Controller
             'balance' => 'required',
         ]);
 
-        Project::create($request->all());
+        $slug= \Str::slug($request->name);
+
+        Project::create(array_merge($request->all(), ['slug' => $slug]));
 
         return redirect()->route('projects.index')
                         ->with('success','Project created successfully.');
