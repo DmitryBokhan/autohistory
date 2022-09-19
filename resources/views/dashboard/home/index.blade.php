@@ -94,19 +94,37 @@
          <!-- small box -->
          <div class="small-box bg-danger">
            <div class="inner">
-             <h3>1 300 545
+             <h3>{{$balance}}
               <sup style="font-size: 20px"> ₽</sup>
              </h3>
 
-             <p>Финансы</p>
+             <p>Мой баланс свободных средств</p>
            </div>
            <div class="icon">
              <i class="ion ion-pie-graph"></i>
            </div>
-           <a href="#" class="small-box-footer">Мои финансы <i class="fas fa-arrow-circle-right"></i></a>
+           <a href="#" class="small-box-footer">Список поступлений<i class="fas fa-arrow-circle-right"></i></a>
          </div>
        </div>
        <!-- ./col -->
+         <!-- ./col -->
+         <div class="col-lg-3 col-6">
+             <!-- small box -->
+             <div class="small-box bg-danger">
+                 <div class="inner">
+                     <h3>{{$balance_invest}}
+                         <sup style="font-size: 20px"> ₽</sup>
+                     </h3>
+
+                     <p>Мой баланс инвестированных средств</p>
+                 </div>
+                 <div class="icon">
+                     <i class="ion ion-pie-graph"></i>
+                 </div>
+                 <a href="#" class="small-box-footer">Список инвестиций<i class="fas fa-arrow-circle-right"></i></a>
+             </div>
+         </div>
+         <!-- ./col -->
      </div>
      <!-- /.row -->
    </div><!-- /.container-fluid -->

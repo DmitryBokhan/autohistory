@@ -27,8 +27,9 @@ $(document).ready(function () {
    // AJAX ДЛЯ ВЫБОРА МОДЕЛИ АВТОМОБИЛЯ
    //выбор марки и заполнение списка моделей
    $("#marks").on('change', function () {
-      $("#engine_volume").attr("disabled", false);
-      $("#transmission").attr("disabled", false);
+       $('#engine_types').attr("disabled", "disabled");
+       $("#engine_volume").attr("disabled", "disabled");
+       $("#transmission").attr("disabled", "disabled");
       $.ajaxSetup({
          headers: {
             'X-CSRF-TOKEN': $("input[name='_token']").val()
@@ -39,18 +40,19 @@ $(document).ready(function () {
          method: "POST",
          data: { mark: $(this).val() },
          success: function (data) {
-            $('#models').html(data),
-               $('#engine_types').html('<option selected>Выберите тип ДВС</option>'),
-               $('#engine_volume').html('<option selected>Выберите объем ДВС</option>'),
-               $('#transmission').html('<option selected>Выберите тип КПП</option>')
+            $('#models').html(data);
+            $('#models').attr("disabled", false);
+            $('#engine_types').html('<option selected>Выберите тип ДВС</option>');
+            $('#engine_volume').html('<option selected>Выберите объем ДВС</option>');
+            $('#transmission').html('<option selected>Выберите тип КПП</option>');
          }
       })
    })
 
    //выбор модели и заполнение списка типов ДВС
    $("#models").on('change', function () {
-      $("#engine_volume").attr("disabled", false);
-      $("#transmission").attr("disabled", false);
+      $("#engine_volume").attr("disabled", "disabled");
+      $("#transmission").attr("disabled", "disabled");
       $.ajaxSetup({
          headers: {
             'X-CSRF-TOKEN': $("input[name='_token']").val()
@@ -64,9 +66,10 @@ $(document).ready(function () {
             model: $(this).val(),
          },
          success: function (data) {
-            $('#engine_types').html(data)
-            $('#engine_volume').html('<option selected>Выберите объем ДВС</option>'),
-               $('#transmission').html('<option selected>Выберите тип КПП</option>')
+            $('#engine_types').html(data);
+             $("#engine_types").attr("disabled", false);
+            $('#engine_volume').html('<option selected>Выберите объем ДВС</option>');
+            $('#transmission').html('<option selected>Выберите тип КПП</option>');
          }
       })
    })
@@ -76,11 +79,10 @@ $(document).ready(function () {
       if ($(this).val() == 'электро') {
          $("#engine_volume").attr("disabled", "disabled");
          $("#transmission").attr("disabled", "disabled");
-         $('#engine_volume').html('<option selected>N/A</option>')
-         $('#transmission').html('<option selected>N/A</option>')
+         $('#engine_volume').html('<option selected>N/A</option>');
+         $('#transmission').html('<option selected>N/A</option>');
       } else {
-         $("#engine_volume").attr("disabled", false);
-         $("#transmission").attr("disabled", false);
+         $("#transmission").attr("disabled", "disabled");
          $.ajaxSetup({
             headers: {
                'X-CSRF-TOKEN': $("input[name='_token']").val()
@@ -95,8 +97,9 @@ $(document).ready(function () {
                engine_type: $(this).val(),
             },
             success: function (data) {
-               $('#engine_volume').html(data),
-                  $('#transmission').html('<option selected>Выберите тип КПП</option>')
+               $('#engine_volume').html(data);
+               $("#engine_volume").attr("disabled", false);
+               $('#transmission').html('<option selected>Выберите тип КПП</option>')
             }
          })
       }
@@ -120,7 +123,9 @@ $(document).ready(function () {
             engine_volume: $(this).val(),
          },
          success: function (data) {
-            $('#transmission').html(data)
+            $('#transmission').html(data);
+             $('#transmission').attr("disabled", false);
+
          }
       })
    })
@@ -129,8 +134,8 @@ $(document).ready(function () {
     //выбор страны и заполнение списка регионов
     $("#countries").on('change', function () {
         $("#regions").attr("disabled", false);
-        $('#cities').html('<option selected>Выберите город</option>'),
-        $("#cities").attr("disabled", "disabled")
+        $('#cities').html('<option selected>Выберите город</option>');
+        $("#cities").attr("disabled", "disabled");
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $("input[name='_token']").val()
@@ -141,7 +146,7 @@ $(document).ready(function () {
             method: "POST",
             data: { country: $(this).val() },
             success: function (data) {
-                $('#regions').html(data)
+                $('#regions').html(data);
 
             }
         })
@@ -160,7 +165,7 @@ $(document).ready(function () {
             method: "POST",
             data: { region: $(this).val() },
             success: function (data) {
-                $('#cities').html(data)
+                $('#cities').html(data);
             }
         })
     })

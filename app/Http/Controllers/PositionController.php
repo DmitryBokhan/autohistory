@@ -27,9 +27,9 @@ class PositionController extends Controller
             $is_active_archive = true;
         }
 
-        $is_first_active = false;
-        if(!($is_active_prepare && $is_active_prepare && $is_active_prepare)){
-            $is_first_active = true;
+        $is_first_active = true;
+        if($is_active_prepare || $is_active_sale || $is_active_archive){
+            $is_first_active = false;
         }
 
 
@@ -137,6 +137,7 @@ class PositionController extends Controller
             'gos_number' => $request->gos_number,
             'purchase_date' => $request->purchase_date,
             'purchase_cost' => $request->purchase_cost,
+            'sale_cost_plan' => $request->sale_cost_plan,
             'city_id' => $request->cities,
             'preparation_start' => $request->preparation_start,
             'preparation_plan' => $request->preparation_plan,
@@ -217,9 +218,7 @@ class PositionController extends Controller
 
         if(isset($request->region)){
             $cities = DB::table('cities')
-                ->where('region_id', $request->region)
-                ->get();
-
+                ->where('region_id', $request->region)->get();
             echo '<option selected>Выберите город</option>';
             foreach ($cities as  $city) {
                 echo '<option value="'.$city->id. '">'.$city->name. '</option>';

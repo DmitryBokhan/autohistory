@@ -8,6 +8,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\InvestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +52,15 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/create_position', [PositionController::class, 'store'])->name('create_position.store');
     Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');
 
+    Route::get('/receipt', [ReceiptController::class, 'index'])->name('receipt.index');
+    Route::post('/receipt', [ReceiptController::class, 'store'])->name('receipt.store');
+
+    //страница добавлени инвестиции
+    Route::get('/invest_position/{position_id}',[InvestController::class, 'create']);
+
+    //добавить инвестицию
+    Route::post('/invest_position/store', [InvestController::class, 'store'])->name('invest_position.store');
+
 });
 
 
@@ -66,6 +77,10 @@ Route::get('/create_investor', function () {
 
 Route::get("/test", function(){
 
+    $position = App\Models\Position::find(4);
+    dd($position->user->name);
+
+   // dd(User::role('investor')->get());
     $user = auth()->user();
     dump($user);
     $permissions = $user->getAllPermissions();

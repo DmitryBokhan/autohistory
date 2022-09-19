@@ -27,8 +27,8 @@ class CreatePositionsTable2 extends Migration
             $table->date('preparation_start'); //дата начала подготовки
             $table->integer('preparation_plan'); //планироемое количество дней на подготовку автомобиля
             $table->date('preparation_end')->nullable(); //дата окончания подготовки
-            $table->integer('additional_cost_plan'); //планируемая сумма продажи позиции
-            $table->integer('additional_cost_fact')->nullable(); //фактическая сумма продажи позиции
+            $table->integer('additional_cost_plan'); //планируемые расходы на подготовку
+            $table->integer('additional_cost_fact')->nullable(); //фактические расходы на подготовку
             $table->text('comment')->nullable();
             $table->timestamps();
         });

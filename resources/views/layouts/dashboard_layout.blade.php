@@ -184,7 +184,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('receipt.index') }}" class="nav-link">
                   <p>Приход</p>
                 </a>
               </li>

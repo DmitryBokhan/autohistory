@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\AppSetting;
 use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
@@ -52,6 +53,7 @@ class UserController extends Controller
 
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
+        $input['invest_percent'] = AppSetting::getDefaultPercentInvest();
 
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
