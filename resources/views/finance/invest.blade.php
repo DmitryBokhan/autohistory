@@ -34,16 +34,6 @@
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12">
-{{--                                        <div class="form-group">--}}
-{{--                                            <label for="positions">Позиция</label>--}}
-{{--                                            <select class="form-control" id="positions" name="positions" aria-label="Позиции">--}}
-{{--                                                @foreach ($positions as $position)--}}
-{{--                                                    <option value="{{ $position->id }}">{{ $position->gos_number . ' '. $position->car->model }}</option>--}}
-{{--                                                @endforeach--}}
-{{--                                            </select>--}}
-{{--                                        </div>--}}
-                                    </div>
-                                    <div class="col-xs-12 col-sm-12 col-md-12">
                                         <div class="form-group">
                                             <label for="pay_purposes">Цель инвестиции</label>
                                             <select class="form-control" id="pay_purposes" name="pay_purposes" aria-label="Цель инвестиции">
@@ -58,7 +48,7 @@
                                             <label for="investors">Инвестор</label>
                                             <select class="form-control"  id="investors" name="investors" aria-label="Инвестор">
                                                 @foreach($investors as $investor)
-                                                    <option value="{{ $investor->id }}">{{ $investor->name }}</option>
+                                                    <option value="{{ $investor->id }}">{{ $investor->name ." | " . $investor->invest_percent."% | " . App\Models\Account::getBalance($investor->id)}}р.</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -71,10 +61,10 @@
                                     </div>
                                     <div class="col-xs-12 col-sm-12 col-md-12">
                                         <div class="form-group">
-                                            <label for="schemas">Схема инвестирования</label>
-                                            <select class="form-control"  id="schemas" name="schemas" aria-label="Схема инвестирования">
-                                                @foreach($invest_schemas as $schema)
-                                                    <option value="{{ $schema->id }}">{{ $schema->name }}</option>
+                                            <label for="schemes">Схема инвестирования</label>
+                                            <select class="form-control"  id="schemes" name="schemes" aria-label="Схема инвестирования">
+                                                @foreach($invest_schemes as $scheme)
+                                                    <option value="{{ $scheme->id }}">{{ $scheme->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -102,5 +92,6 @@
             </div>
         </div>
     </form>
+
 
 @endsection

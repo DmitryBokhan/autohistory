@@ -111,27 +111,27 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-newspaper"></i>
-              <p>
-                Проекты
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ route('projects.index') }}" class="nav-link">
-                  <p>Все проекты</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('projects.create') }}" class="nav-link">
-                  <p>Добавить проект</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+{{--          <li class="nav-item">--}}
+{{--            <a href="#" class="nav-link">--}}
+{{--              <i class="nav-icon fas fa-newspaper"></i>--}}
+{{--              <p>--}}
+{{--                Проекты--}}
+{{--                <i class="right fas fa-angle-left"></i>--}}
+{{--              </p>--}}
+{{--            </a>--}}
+{{--            <ul class="nav nav-treeview">--}}
+{{--              <li class="nav-item">--}}
+{{--                <a href="{{ route('projects.index') }}" class="nav-link">--}}
+{{--                  <p>Все проекты</p>--}}
+{{--                </a>--}}
+{{--              </li>--}}
+{{--              <li class="nav-item">--}}
+{{--                <a href="{{ route('projects.create') }}" class="nav-link">--}}
+{{--                  <p>Добавить проект</p>--}}
+{{--                </a>--}}
+{{--              </li>--}}
+{{--            </ul>--}}
+{{--          </li>--}}
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-car"></i>
@@ -143,12 +143,14 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{ route('positions.index') }}" class="nav-link">
-                  <p>Все позиции</p>
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Все позиции</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ route('create_position') }}" class="nav-link">
-                  <p>Добавить позицию</p>
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Добавить позицию</p>
                 </a>
               </li>
             </ul>
@@ -164,11 +166,13 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
                   <p>Инвесторы</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="/create_investor" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
                   <p>Добавить инвестора</p>
                 </a>
               </li>
@@ -185,12 +189,14 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{ route('receipt.index') }}" class="nav-link">
-                  <p>Приход</p>
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Приход</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
-                  <p>Расход</p>
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Расход</p>
                 </a>
               </li>
             </ul>
@@ -207,16 +213,19 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{ route('users.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
                   <p>Все пользователи</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ route('users.create') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
                   <p>Добавить пользователя</p>
                 </a>
               </li>
               <li class="nav-item">
                <a href="{{ route('roles.index') }}" class="nav-link">
+                   <i class="far fa-circle nav-icon"></i>
                  <p>Роли</p>
                </a>
              </li>

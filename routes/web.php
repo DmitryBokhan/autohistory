@@ -52,6 +52,12 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/create_position', [PositionController::class, 'store'])->name('create_position.store');
     Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');
 
+    Route::get('/position/{position_id}/edit', [PositionController::class, 'edit'])->name('position.edit');
+
+    Route::put('/position/{position_id}', [PositionController::class, 'update'])->name('position.update');
+
+    Route::get("/position_info/{position_id}", [PositionController::class, 'info'])->name('position_info');
+
     Route::get('/receipt', [ReceiptController::class, 'index'])->name('receipt.index');
     Route::post('/receipt', [ReceiptController::class, 'store'])->name('receipt.store');
 

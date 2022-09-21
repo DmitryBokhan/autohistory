@@ -35,7 +35,7 @@
                                     <th>Год выпуска</th>
                                     <th>Гос. номер</th>
                                     <th>Стоимость авто</th>
-                                    <th>Действия</th>
+                                    <th></th>
                                 </tr>
                                 @foreach ($positions_prepare as $position)
                                     <tr>
@@ -49,19 +49,9 @@
                                         <td>{{ $position->year }}</td>
                                         <td>{{ $position->gos_number }}</td>
                                         <td>{{ $position->purchase_cost }}</td>
-                                        <td>
-                                            <div class="row">
-                                                <div class="col-xs-4 col-sm-4 col-md-4 text-center">
-                                                    <a href="/invest_position/{{$position->id}}"><button class="btn btn-primary">Инвестировать</button></a>
-                                                </div>
-                                                <div class="col-xs-4 col-sm-4 col-md-4 text-center">
-                                                    <a href="#"><button class="btn btn-primary">Информация</button></a>
-                                                </div>
-                                                <div class="col-xs-4 col-sm-4 col-md-4 text-center">
-                                                    <a href="#"><button class="btn btn-primary">Редактировать</button></a>
-                                                </div>
-                                            </div>
-                                        </td>
+                                        <td class="text-center">
+                                            <a class="btn btn-warning btn-sm" href="/position_info/{{$position->id}}">Действия</a>
+                                        </td
                                     </tr>
                                 @endforeach
                             </table>

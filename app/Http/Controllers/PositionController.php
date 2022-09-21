@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Position;
+use App\Models\Account;
 
 class PositionController extends Controller
 {
@@ -146,6 +147,92 @@ class PositionController extends Controller
 
         return redirect()->route('positions.index')
             ->with('success','Позиция успешно добавлена');
+    }
+
+    public function edit($position_id)
+    {
+        //TODO прокинуть данные из позиции в представление
+        $position = Position::find($position_id);
+        $marks = DB::table('carsbase')->distinct()->pluck('mark');
+        $models = DB::table('carsbase')->where('mark', $position->car->mark)->distinct()->pluck('model');
+        $engine_types = DB::table('carsbase')
+            ->where('mark', $position->car->mark)
+            ->where('model', $position->car->model)
+            ->distinct()->pluck('engine-type');
+        $engine_volumes = DB::table('carsbase')
+            ->where('mark', $position->car->mark)
+            ->where('model', $position->car->model)
+            ->where('engine-type', $position->car->{'engine-type'})
+            ->distinct()->pluck('volume');
+        $transmissions = DB::table('carsbase')
+            ->where('mark', $position->car->mark)
+            ->where('model', $position->car->model)
+            ->where('engine-type', $position->car->{'engine-type'})
+            ->where('volume', $position->car->volume)
+            ->distinct()->pluck('transmission');
+
+        $countries = DB::table('countries')->get();
+        $regions = DB::table('regions')->where('country_id', $position->city->country_id)->get();
+        $cities = DB::table('cities')->where('country_id', $position->city->country_id)->where('region_id', $position->city->region_id)->get();
+
+        return view('positions.edit', compact(['position', 'marks', 'models', 'engine_types', 'engine_volumes', 'transmissions', 'countries', 'regions', 'cities']));
+    }
+
+    public function update(Request $request, $position)
+    {
+        //TODO сделать валидацию формы!
+        if($request->engine_types == "электро") {
+            $car_id = DB::table('carsbase')
+                ->distinct()
+                ->where('mark', $request->marks)
+                ->where('model', $request->models)
+                ->where('engine-type', $request->engine_types)
+                ->pluck('id')
+                ->first();
+
+        }else{
+            $car_id = DB::table('carsbase')
+                ->distinct()
+                ->where('mark', $request->marks)
+                ->where('model', $request->models)
+                ->where('engine-type', $request->engine_types)
+                ->where('volume', $request->engine_volume)
+                ->where('transmission', $request->transmission)
+                ->pluck('id')
+                ->first();
+        }
+        Position::find($position)->update([
+
+            'car_id' => $car_id,
+            'year' => $request->year,
+            'gos_number' => $request->gos_number,
+            'purchase_date' => $request->purchase_date,
+            'purchase_cost' => $request->purchase_cost,
+            'sale_cost_plan' => $request->sale_cost_plan,
+            'city_id' => $request->cities,
+            'preparation_start' => $request->preparation_start,
+            'preparation_plan' => $request->preparation_plan,
+            'additional_cost_plan' => $request->additional_cost_plan,
+            'comment' => $request->comment
+        ]);
+        return redirect()->route("position_info", $position)
+            ->with('success','Данные позиции успешно обновлены');
+    }
+
+    /**
+     * Информация о позиции
+     * @param Request $request
+     * @return void
+     */
+    public function info($position_id)
+    {
+
+        $position = Position::find($position_id);
+
+
+        $accounts = Account::where('position_id', $position_id)->get();
+
+        return view('positions.info', compact('position', 'accounts'));
     }
 
     public function cars_ajax(Request $request)

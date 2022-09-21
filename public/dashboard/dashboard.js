@@ -59,7 +59,7 @@ $(document).ready(function () {
          }
       });
       $.ajax({
-         url: "cars_ajax",
+         url: "/cars_ajax",
          method: "POST",
          data: {
             mark_change: $('#marks').val(),
@@ -89,7 +89,7 @@ $(document).ready(function () {
             }
          });
          $.ajax({
-            url: "cars_ajax",
+            url: "/cars_ajax",
             method: "POST",
             data: {
                mark_change: $('#marks').val(),
@@ -114,7 +114,7 @@ $(document).ready(function () {
          }
       });
       $.ajax({
-         url: "cars_ajax",
+         url: "/cars_ajax",
          method: "POST",
          data: {
             mark_change: $('#marks').val(),
