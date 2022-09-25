@@ -66,7 +66,7 @@
          <!-- small box -->
          <div class="small-box bg-secondary">
            <div class="inner">
-             <h3>0</h3>
+             <h3>{{App\Models\Position::getCountPositionOwn(Auth()->user()->id)}}</h3>
              <p>Мои позиции</p>
            </div>
            <div class="icon">

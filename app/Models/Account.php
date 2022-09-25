@@ -68,6 +68,7 @@ class Account extends Model
     }
 
 
+
     /**
      * Добавить инвестицию в позицию
      * @param $user_id int
@@ -126,6 +127,19 @@ class Account extends Model
     {
 
         $sum = Account::where('position_id', $this->position_id)
+            ->where('operation_id', 7)
+            ->where('status', 'OPEN')->get()->sum('sum');
+        return abs($sum);
+    }
+
+    /**
+     * Получить сумму всех инвестированных средств по id позиции
+     * @return float|int
+     */
+    public function getSumAccountsInPositionById($position_id)
+    {
+
+        $sum = Account::where('position_id', $position_id)
             ->where('operation_id', 7)
             ->where('status', 'OPEN')->get()->sum('sum');
         return abs($sum);
@@ -195,7 +209,6 @@ class Account extends Model
                 return abs($this->sum) * $this->invest_percent / 100;
                 break;
             case(2): //% от прибыли
-
                 $position = Position::find($this->position_id);
                 $result = $position->CalcProfit() * ($this->getPartPercent() / 100);
                 return round($result,2,PHP_ROUND_HALF_DOWN);

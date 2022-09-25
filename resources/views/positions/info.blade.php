@@ -42,9 +42,10 @@
             <div class="col-sm-4 car-col">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><h5>Стоимость и подготовка</h5></li>
-                    <li class="list-group-item"><b>Стоимость автомобиля:</b> {{ $position->purchase_cost }} ₽</li>
-                    <li class="list-group-item"><b>Планируемая стоимость продажи:</b> {{ $position->sale_cost_plan }} ₽</li>
-                    <li class="list-group-item"><b>Планируемые расходы на подготовку:</b> {{ $position->additional_cost_plan }} ₽</li>
+                    <li class="list-group-item"><b>Стоимость автомобиля:</b> <span data-sum="">{{ $position->purchase_cost }}</span> ₽</li>
+                    <li class="list-group-item"><b>Планируемая стоимость продажи:</b> <span data-sum="">{{ $position->sale_cost_plan }}</span> ₽</li>
+                    <li class="list-group-item"><b>Планируемые расходы на доставку:</b> <span data-sum="">{{ $position->delivery_cost_plan }}</span> ₽</li>
+                    <li class="list-group-item"><b>Планируемые расходы на подготовку:</b> <span data-sum="">{{ $position->additional_cost_plan }}</span> ₽</li>
                     <li class="list-group-item"><b>Дата начала подготовки:</b> {{ $position->preparation_start }}</li>
                     <li class="list-group-item"><b>Планируемое время подготовки (дней):</b> {{ $position->preparation_plan }}</li>
                 </ul>
@@ -58,6 +59,51 @@
                 @else
                     {{ $position->comment }}
                 @endif
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 ml-3 mt-2 md-2 mr-2">
+                <p class="text-center">
+                    <strong>Цели инвестирования</strong>
+                </p>
+                <div class="progress-group">
+                    <span class="progress-text">Покупка автомобиля ({{ $position->getPercentInvestPurchase() }}%)</span>
+                    <span class="float-right">Инв-но <b><span data-sum="">{{$position->getSumInvestPurchase()}}</span>р.</b> из <b><span data-sum="">{{$position->purchase_cost}}</span>р.</b> | еще нужно: <b><span data-sum-need="">{{$position->purchase_cost - $position->getSumInvestPurchase()}}</span>р.</b></span>
+                    <div class="progress progress-sm">
+                        <div class="progress-bar bg-danger bg-primary" style="width: {{ $position->getPercentInvestPurchase() }}%"></div>
+                    </div>
+                </div>
+                <div class="progress-group">
+                    <span class="progress-text">Доставка автомобиля ({{ $position->getPercentInvestDelivery() }}%)</span>
+                    <span class="float-right">Инв-но <b><span data-sum="">{{$position->getSumInvestDelivery()}}</span>р.</b> из <b><span data-sum="">{{$position->delivery_cost_plan}}</span>р.</b> | еще нужно: <b><span data-sum-need="">{{$position->delivery_cost_plan - $position->getSumInvestDelivery()}}</span>р.</b></span>
+                    <div class="progress progress-sm">
+                        <div class="progress-bar  bg-warning" style="width: {{ $position->getPercentInvestDelivery() }}%"></div>
+                    </div>
+                </div>
+                <div class="progress-group">
+                    <span class="progress-text">Подготовка автомобиля ({{ $position->getPercentInvestPreparation() }}%)</span>
+                    <span class="float-right">Инв-но <b><span data-sum="">{{$position->getSumInvestPreparation()}}</span>р.</b> из <b><span data-sum="">{{$position->additional_cost_plan}}</span>р.</b> | еще нужно: <b><span data-sum-need="">{{$position->additional_cost_plan - $position->getSumInvestPreparation()}}</span>р.</b></span>
+                    <div class="progress progress-sm">
+                        <div class="progress-bar bg-success" style="width: {{ $position->getPercentInvestPreparation() }}%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="row mt-4">
+                    <div class="col-ms-6 col-6">
+                        <div class="description-block">
+                            <span class="description-text">ДОХОД ИНВЕТОРОВ</span>
+                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->CalcSumProfitInvestors()}}</h4>
+                        </div>
+                    </div>
+                    <div class="col-ms-6 col-6">
+                        <div class="description-block border-left">
+                            <span class="description-text">МОЙ ДОХОД С ПОЗИЦИИ</span>
+                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->CalcSumProfitOwn()}}</h4>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
         <div class="row">
@@ -92,10 +138,10 @@
                             <td>{{$account->user->name}}</td>
                             <td>{{$account->payPurpose->name}}</td>
                             <td>{{$account->investScheme->name}}</td>
-                            <td>{{abs($account->sum)}} ₽</td>
+                            <td data-sum="">{{abs($account->sum)}}</td>
                             <td>{{$account->showInvestPercent() ? $account->showInvestPercent() : '-' }}</td>
-                            <td>{{$account->invest_fixed ? $account->invest_fixed  . ' ₽' : '-' }}</td>
-                            <td>{{$account->CalcAccountProfit()}} ₽</td>
+                            <td data-sum="">{{$account->invest_fixed ? $account->invest_fixed : "" }}</td>
+                            <td data-sum="">{{$account->CalcAccountProfit()}}</td>
                             <td>
                                 <a class="btn bg-gradient-warning btn-outline-secondary btn-sm" href="#"><i class="fas fa-edit"></i></a>
                                 <a class="btn bg-gradient-danger btn-outline-secondary btn-sm" href="#"><i class="fas fa-trash"></i></a>
@@ -109,7 +155,7 @@
                 @endif
                 <div class="row mb-4">
                     <div class="col-12 text-left">
-                        <a class="btn bg-gradient-warning btn-outline-secondary btn-sm" href="/invest_position/{{$position->id}}">+ Добавить инвестора</a>
+                        <a class="btn bg-gradient-warning btn-outline-secondary btn-sm" href="{{route('invest_position.create', $position->id)}}">+ Добавить инвестора</a>
                     </div>
                 </div>
 
@@ -122,7 +168,7 @@
                     <table class="table">
                         <tbody><tr>
                             <th style="width:50%">Ожидаемй доход от продажи позиции (общий):</th>
-                            <td>{{$position->CalcProfit()}} ₽</td>
+                            <td data-profit="">{{$position->CalcProfit()}} </td>
                         </tr>
                         <tr>
                             <th>% прибыльности</th>
@@ -130,11 +176,11 @@
                         </tr>
                         <tr>
                             <th>Доход инвеcторов:</th>
-                            <td>{{$position->CalcSumProfitInvestors()}} ₽</td>
+                            <td data-sum="">{{$position->CalcSumProfitInvestors()}}</td>
                         </tr>
                         <tr>
                             <th>Мой доход:</th>
-                            <td>{{$position->CalcSumProfitOwn()}} ₽</td>
+                            <td data-sum="">{{$position->CalcSumProfitOwn()}}</td>
                         </tr>
                         </tbody></table>
                 </div>

@@ -14,7 +14,7 @@
 
     @if ($errors->any())
         <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+            <strong>Ошибка!</strong><br><br>
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -22,7 +22,6 @@
             </ul>
         </div>
     @endif
-
     <form action="{{ route('position.update', $position) }}" method="POST">
         @csrf
         @method('put')
@@ -117,7 +116,7 @@
                                     <div class="col-xs-6 col-sm-6 col-md-6">
                                         <div class="form-group">
                                             <label for="year">Год выпуска</label>
-                                            <input type="text" name="year" value="{{$position->year}}" class="form-control" placeholder="Год выпуска">
+                                            <input type="text" data-year="" name="year" value="{{$position->year}}" class="form-control" placeholder="Год выпуска">
                                         </div>
                                     </div>
                                     <div class="col-xs-6 col-sm-6 col-md-6">
@@ -193,44 +192,53 @@
                 </div>
                 <div class="card card-warning">
                     <div class="card-header">
-                        <h3 class="card-title">Стоимость и подготовка</h3>
+                        <h3 class="card-title">Стоимость | доставка | подготовка</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <strong>Стоимость автомобиля:</strong>
-                                    <input type="text" class="form-control" name="purchase_cost" value="{{$position->purchase_cost}}" placeholder="Сумма">
+                                    <input type="text" data-sum="" class="form-control" name="purchase_cost" value="{{$position->purchase_cost}}" placeholder="Сумма">
                                 </div>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <strong>Планируемая стоимость продажи:</strong>
-                                    <input type="text" class="form-control" name="sale_cost_plan" value="{{$position->sale_cost_plan}}" placeholder="Сумма">
+                                    <input type="text" data-sum="" class="form-control" name="sale_cost_plan" value="{{$position->sale_cost_plan}}" placeholder="Сумма">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-4 col-sm-4 col-md-4">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <strong>Дата начала подготовки:</strong>
                                     <input class="form-control py-2 border-right-0 border" name="preparation_start" value="{{$position->preparation_start}}" type="date">
                                     <span class="input-group-append ml-n1"></span>
                                 </div>
                             </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <strong>Планируемое время подготовки (дней):</strong>
-                                    <input type="text" class="form-control" name="preparation_plan" value="{{$position->preparation_plan}}"
+                                    <input type="text" data-num="" class="form-control" name="preparation_plan" value="{{$position->preparation_plan}}"
                                            placeholder="Укажите количество дней на подготовку">
                                 </div>
                             </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4">
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
-                                    <strong>Планируемые расходы на подготовку:</strong>
-                                    <input type="text" class="form-control" name="additional_cost_plan" value="{{$position->additional_cost_plan}}" placeholder="Сумма">
+                                    <strong>Планируемые расходы на доставку:</strong>
+                                    <input type="text" class="form-control" data-sum="" name="delivery_cost_plan" value="{{$position->delivery_cost_plan}}" placeholder="Сумма">
                                 </div>
                             </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <strong>Планируемые расходы на подготовку:</strong>
+                                    <input type="text" class="form-control" data-sum="" name="additional_cost_plan" value="{{$position->additional_cost_plan}}" placeholder="Сумма">
+                                </div>
+                            </div>
+                        </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <strong>Комментарий:</strong>

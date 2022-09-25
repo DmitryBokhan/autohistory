@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Position;
 use App\Models\Account;
+use App\Http\Requests\Position\StoreRequest;
+use App\Http\Requests\Position\UpdateRequest;
+use Illuminate\Database\QueryException;
 
 class PositionController extends Controller
 {
@@ -57,51 +60,16 @@ class PositionController extends Controller
         return view('positions.create', ['marks' => $marks, 'countries' => $countries, 'regions' => $regions,  'cities' => $cities]);
     }
 
+
     /**
      * Поместить только что созданный ресурс в хранилище.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        if($request->engine_types == "электро") {
-            request()->validate([
-                'marks' => 'required',
-                'models' => 'required',
-                'engine_types' => 'required',
-                'year' => 'required',
-                'gos_number' => 'required',
-                'purchase_date' => 'required',
-                'purchase_cost' => 'required',
-                'countries' => 'required',
-                'regions' => 'required',
-                'cities' => 'required',
-                'preparation_start' => 'required',
-                'preparation_plan' => 'required',
-                'additional_cost_plan' => 'required'
 
-            ]);
-        }else{
-            request()->validate([
-                'marks' => 'required',
-                'models' => 'required',
-                'engine_types' => 'required',
-                'engine_volume' => 'required',
-                'transmission' => 'required',
-                'year' => 'required',
-                'gos_number' => 'required',
-                'purchase_date' => 'required',
-                'purchase_cost' => 'required',
-                'countries' => 'required',
-                'regions' => 'required',
-                'cities' => 'required',
-                'preparation_start' => 'required',
-                'preparation_plan' => 'required',
-                'additional_cost_plan' => 'required'
-
-            ]);
-        }
+        //валидация вынесена в StoreRequest
 
         $user_id = auth()->user()->id;
 
@@ -126,10 +94,7 @@ class PositionController extends Controller
                 ->first();
         }
 
-        //dd($request->year);
-        //Position::create(array_merge($request->all(), ['user_id' => $user_id, 'car_id' => $car_id, 'position_status_id' => 1 ]));
-
-
+    try {
         Position::create([
             'user_id' => $user_id,
             'position_status_id' => 1,
@@ -137,21 +102,26 @@ class PositionController extends Controller
             'year' => $request->year,
             'gos_number' => $request->gos_number,
             'purchase_date' => $request->purchase_date,
-            'purchase_cost' => $request->purchase_cost,
-            'sale_cost_plan' => $request->sale_cost_plan,
+            'purchase_cost' => str_replace(" ", "",$request->purchase_cost),
+            'sale_cost_plan' => str_replace(" ", "", $request->sale_cost_plan),
             'city_id' => $request->cities,
             'preparation_start' => $request->preparation_start,
             'preparation_plan' => $request->preparation_plan,
-            'additional_cost_plan' => $request->additional_cost_plan
+            'additional_cost_plan' =>  str_replace(" ", "", $request->additional_cost_plan),
+            'delivery_cost_plan' => str_replace(" ", "", $request->delivery_cost_plan),
         ]);
-
+    } catch(\Illuminate\Database\QueryException $ex){
+            //если прилетело исключение - сделать редирект назад и показать ошибку
+        return redirect()->back()
+            ->withInput()
+            ->withErrors(['error' => 'Ошибка запонения формы']);
+    }
         return redirect()->route('positions.index')
             ->with('success','Позиция успешно добавлена');
     }
 
     public function edit($position_id)
     {
-        //TODO прокинуть данные из позиции в представление
         $position = Position::find($position_id);
         $marks = DB::table('carsbase')->distinct()->pluck('mark');
         $models = DB::table('carsbase')->where('mark', $position->car->mark)->distinct()->pluck('model');
@@ -178,9 +148,11 @@ class PositionController extends Controller
         return view('positions.edit', compact(['position', 'marks', 'models', 'engine_types', 'engine_volumes', 'transmissions', 'countries', 'regions', 'cities']));
     }
 
-    public function update(Request $request, $position)
+    public function update(UpdateRequest $request, $position)
     {
-        //TODO сделать валидацию формы!
+
+        //валидация вынесена в UpdateRequest
+
         if($request->engine_types == "электро") {
             $car_id = DB::table('carsbase')
                 ->distinct()
@@ -201,20 +173,29 @@ class PositionController extends Controller
                 ->pluck('id')
                 ->first();
         }
-        Position::find($position)->update([
 
+        try{
+        Position::find($position)->update([
             'car_id' => $car_id,
             'year' => $request->year,
             'gos_number' => $request->gos_number,
             'purchase_date' => $request->purchase_date,
-            'purchase_cost' => $request->purchase_cost,
-            'sale_cost_plan' => $request->sale_cost_plan,
+            'purchase_cost' => str_replace(" ", "",$request->purchase_cost),
+            'sale_cost_plan' => str_replace(" ", "", $request->sale_cost_plan),
             'city_id' => $request->cities,
             'preparation_start' => $request->preparation_start,
             'preparation_plan' => $request->preparation_plan,
-            'additional_cost_plan' => $request->additional_cost_plan,
+            'additional_cost_plan' =>  str_replace(" ", "", $request->additional_cost_plan),
+            'delivery_cost_plan' => str_replace(" ", "", $request->delivery_cost_plan),
             'comment' => $request->comment
         ]);
+
+        } catch(\Illuminate\Database\QueryException $ex){
+        //если прилетело исключение - сделать редирект назад и показать ошибку
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['error' => 'Ошибка запонения формы']);
+        }
         return redirect()->route("position_info", $position)
             ->with('success','Данные позиции успешно обновлены');
     }
@@ -226,9 +207,7 @@ class PositionController extends Controller
      */
     public function info($position_id)
     {
-
         $position = Position::find($position_id);
-
 
         $accounts = Account::where('position_id', $position_id)->get();
 

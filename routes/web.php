@@ -61,8 +61,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/receipt', [ReceiptController::class, 'index'])->name('receipt.index');
     Route::post('/receipt', [ReceiptController::class, 'store'])->name('receipt.store');
 
-    //страница добавлени инвестиции
-    Route::get('/invest_position/{position_id}',[InvestController::class, 'create']);
+    //страница добавления инвестиции
+    Route::get('/invest_position/{position_id}/create',[InvestController::class, 'create'])->name('invest_position.create');
 
     //добавить инвестицию
     Route::post('/invest_position/store', [InvestController::class, 'store'])->name('invest_position.store');

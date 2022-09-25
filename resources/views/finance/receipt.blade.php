@@ -15,6 +15,12 @@
         </div>
     @endif
 
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
+        </div>
+    @endif
+
     <form action="{{ route('receipt.store') }}" method="POST">
         @csrf
         <div class="row">
@@ -30,7 +36,7 @@
                                     <label for="user">Список инвесторов</label>
                                     <select class="form-control" id="user" name="user" aria-label="Список инвесторов">
                                         @foreach ($investors as $investor)
-                                            <option value="{{ $investor->id }}">{{ $investor->name }}</option>
+                                            <option value="{{ $investor->id }}"><p style="color: red">{{ $investor->name }}</p> " | " {{ App\Models\Account::getBalance($investor->id) }}р.</option>
                                         @endforeach
                                     </select>
                                 </div>

@@ -282,6 +282,8 @@
 <script src="{{ asset('/dashboard/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('/dashboard/dist/js/adminlte.js') }}"></script>
+<!-- Inputmask -->
+<script src="{{ asset('/dashboard/plugins/inputmask/jquery.inputmask.min.js') }}"></script>
 <!-- Скрипты-->
 <script src="{{ asset('/dashboard/dashboard.js')}}"></script>
 </body>

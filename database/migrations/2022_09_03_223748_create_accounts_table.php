@@ -16,7 +16,7 @@ class CreateAccountsTable extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('user_id');
-            $table->float("sum");
+            $table->float("sum", '12', '2');
             $table->timestamps();
         });
     }

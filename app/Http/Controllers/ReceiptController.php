@@ -27,6 +27,9 @@ class ReceiptController extends Controller
     {
         Account::addDepositIntoAccount($request->user, $request->sum);
 
+        return redirect()->route('receipt.index')
+            ->with('success','Счет успешно пополнен');
+
     }
 
 }

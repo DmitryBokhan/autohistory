@@ -42,7 +42,7 @@ $(document).ready(function () {
          success: function (data) {
             $('#models').html(data);
             $('#models').attr("disabled", false);
-            $('#engine_types').html('<option selected>Выберите тип ДВС</option>');
+            $('#engine_types').html('<option selected>Выберите тип двигателя</option>');
             $('#engine_volume').html('<option selected>Выберите объем ДВС</option>');
             $('#transmission').html('<option selected>Выберите тип КПП</option>');
          }
@@ -169,5 +169,48 @@ $(document).ready(function () {
             }
         })
     })
+
+
+    $('[data-sum]').inputmask({
+        prefix: "",
+        groupSeparator: " ",
+        alias: "currency",
+        digits: 0,
+        rightAlign:false,
+        allowMinus: false,
+        digitsOptional: !1 });
+
+    $('[data-sum-need]').inputmask({
+        prefix: "",
+        groupSeparator: " ",
+        alias: "currency",
+        digits: 0,
+        rightAlign:false,
+        digitsOptional: !1 });
+
+    $('[data-profit]').inputmask({
+        prefix: "",
+        groupSeparator: " ",
+        alias: "currency",
+        digits: 0,
+        rightAlign:false,
+        digitsOptional: !1 });
+
+    $('[data-year]').inputmask({
+        regex: "^[0-9]{4}$",
+       // alias: "numeric",
+        decimal : " ",
+        digits: 0,
+        rightAlign:false,
+        allowMinus: false,
+        });
+
+    $('[data-num]').inputmask({
+        alias: "numeric",
+        decimal : " ",
+        digits: 0,
+        rightAlign:false,
+        allowMinus: false,
+    });
 
 })

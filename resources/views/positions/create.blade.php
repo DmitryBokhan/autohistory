@@ -14,7 +14,7 @@
 
     @if ($errors->any())
         <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+            <strong>Ошибка!</strong><br><br>
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -89,13 +89,13 @@
                                     <div class="col-xs-6 col-sm-6 col-md-6">
                                         <div class="form-group">
                                             <label for="year">Год выпуска</label>
-                                            <input type="text" name="year" class="form-control" placeholder="Год выпуска">
+                                            <input type="text" data-year="" value='{{old('year')}}' name="year" class="form-control" placeholder="Год выпуска">
                                         </div>
                                     </div>
                                     <div class="col-xs-6 col-sm-6 col-md-6">
                                         <div class="form-group">
                                             <label for="gos_number">Гос. номер:</label>
-                                            <input type="text" name="gos_number" class="form-control" placeholder="A000AA00">
+                                            <input type="text" value='{{old('gos_number')}}' name="gos_number" class="form-control" placeholder="A000AA00">
                                         </div>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@
                             <div class="input-group col-xs-2 col-sm-2 col-md-2">
                                 <div class="form-group">
                                     <strong>Дата покупки:</strong>
-                                    <input class="form-control py-2 border-right-0 border" name="purchase_date" type="date">
+                                    <input class="form-control py-2 border-right-0 border" value='{{old('purchase_date')}}' name="purchase_date" type="date">
                                     <span class="input-group-append ml-n1"></span>
                                 </div>
                             </div>
@@ -159,48 +159,61 @@
 
                 <div class="card card-warning">
                     <div class="card-header">
-                        <h3 class="card-title">Стоимость и подготовка</h3>
+                        <h3 class="card-title">Стоимость | доставка | подготовка</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <strong>Стоимость автомобиля:</strong>
-                                    <input type="text" class="form-control" name="purchase_cost" value="" placeholder="Сумма">
+                                    <input type="text" value='{{old('purchase_cost')}}' class="form-control" data-sum="" name="purchase_cost" value="{{old('purchase_cost')}}" placeholder="Сумма">
                                 </div>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <strong>Планируемая стоимость продажи:</strong>
-                                    <input type="text" class="form-control" name="sale_cost_plan" value="" placeholder="Сумма">
+                                    <input type="text" class="form-control" data-sum="" value='{{old('sale_cost_plan')}}' name="sale_cost_plan"  placeholder="Сумма">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-4 col-sm-4 col-md-4">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <strong>Дата начала подготовки:</strong>
-                                    <input class="form-control py-2 border-right-0 border" name="preparation_start" type="date">
+                                    <input class="form-control py-2 border-right-0 border" value='{{old('preparation_start')}}' name="preparation_start" type="date">
                                     <span class="input-group-append ml-n1"></span>
                                 </div>
                             </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <strong>Планируемое время подготовки (дней):</strong>
-                                    <input type="text" class="form-control" name="preparation_plan" value="3"
+                                    @if(old('preparation_start'))
+                                    <input type="text" data-num="" class="form-control" name="preparation_plan" value='{{old('preparation_plan')}}' placeholder="Укажите количество дней на подготовку">
+                                    @else
+                                    <input type="text" data-num="" class="form-control" name="preparation_plan" value="3"
                                            placeholder="Укажите количество дней на подготовку">
+                                    @endif
                                 </div>
                             </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4">
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <strong>Планируемые расходы на доставку:</strong>
+                                    <input type="text" class="form-control" data-sum="" name="delivery_cost_plan" value='{{old('delivery_cost_plan')}}' placeholder="Сумма">
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <strong>Планируемые расходы на подготовку:</strong>
-                                    <input type="text" class="form-control" name="additional_cost_plan" value="" placeholder="Сумма">
+                                    <input type="text" class="form-control" data-sum="" name="additional_cost_plan" value='{{old('additional_cost_plan')}}' placeholder="Сумма">
                                 </div>
                             </div>
+                        </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <strong>Комментарий:</strong>
-                                    <textarea class="form-control" style="height:150px" name="comment" placeholder="Комментарий"></textarea>
+                                    <textarea class="form-control" style="height:150px" name="comment" placeholder="Комментарий">{{old('comment')}}</textarea>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 text-center mb-2">
