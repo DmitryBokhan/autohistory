@@ -6,7 +6,7 @@
 
     @if ($errors->any())
         <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+            <strong>Ошибка!</strong><br><br>
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -36,7 +36,7 @@
                                     <label for="user">Список инвесторов</label>
                                     <select class="form-control" id="user" name="user" aria-label="Список инвесторов">
                                         @foreach ($investors as $investor)
-                                            <option value="{{ $investor->id }}"><p style="color: red">{{ $investor->name }}</p> " | " {{ App\Models\Account::getBalance($investor->id) }}р.</option>
+                                            <option value="{{ $investor->id }}"><p style="color: red">{{ $investor->name }}</p> | {{ App\Models\Account::getBalance($investor->id) }}р.</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -44,7 +44,7 @@
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label for="sum">Сумма прихода</label>
-                                    <input type="text" name="sum" class="form-control" placeholder="Сумма">
+                                    <input type="text" name="sum" data-sum="" class="form-control" placeholder="Сумма">
                                 </div>
                             </div>
                         </div>

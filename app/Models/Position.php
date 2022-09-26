@@ -63,7 +63,7 @@ class Position extends Model
     }
 
     /**
-     * Расситать прибыльность
+     * Расситать прибыльность позиции
      * @return mixed
      */
     public function CalcProfit()
@@ -100,7 +100,7 @@ class Position extends Model
     }
 
     /**
-     * Рассчитать сбственную прибыль в текщей позиции
+     * Рассчитать сбственную прибыль в текущей позиции
      * @return float|int
      */
     public function CalcSumProfitOwn()
@@ -114,7 +114,6 @@ class Position extends Model
      */
     public function getSumInvestPurchase()
     {
-
         $sum = Account::where('position_id', $this->id)
             ->where('pay_purpose_id', 1)
             ->where('status', 'OPEN')->get()->sum('sum');
@@ -144,7 +143,6 @@ class Position extends Model
      */
     public function getSumInvestPreparation()
     {
-
         $sum = Account::where('position_id', $this->id)
             ->where('pay_purpose_id', 3)
             ->where('status', 'OPEN')->get()->sum('sum');
@@ -157,7 +155,6 @@ class Position extends Model
      */
     public function getPercentInvestPreparation()
     {
-
         $sum = Account::where('position_id', $this->id)
             ->where('pay_purpose_id', 3)
             ->where('status', 'OPEN')->get()->sum('sum');
@@ -175,7 +172,6 @@ class Position extends Model
      */
     public function getSumInvestDelivery()
     {
-
         $sum = Account::where('position_id', $this->id)
             ->where('pay_purpose_id', 2)
             ->where('status', 'OPEN')->get()->sum('sum');
@@ -188,8 +184,6 @@ class Position extends Model
      */
     public function getPercentInvestDelivery()
     {
-
-
         $sum = Account::where('position_id', $this->id)
             ->where('pay_purpose_id', 2)
             ->where('status', 'OPEN')->get()->sum('sum');
@@ -201,6 +195,11 @@ class Position extends Model
         return 100;
     }
 
+    /**
+     * Получить количество позиций созданных пользователем
+     * @param $user_id
+     * @return mixed
+     */
     public function getCountPositionOwn($user_id)
     {
         return Position::where('user_id', $user_id)->where('position_status_id', '<>', 3)->get()->count();

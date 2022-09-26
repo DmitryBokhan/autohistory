@@ -94,7 +94,7 @@
          <!-- small box -->
          <div class="small-box bg-danger">
            <div class="inner">
-             <h3>{{$balance}}
+               <h3><span data-profit="">{{$balance}}</span>
               <sup style="font-size: 20px"> ₽</sup>
              </h3>
 
@@ -112,7 +112,7 @@
              <!-- small box -->
              <div class="small-box bg-danger">
                  <div class="inner">
-                     <h3>{{$balance_invest}}
+                     <h3><span data-profit="">{{$balance_invest}}</span>
                          <sup style="font-size: 20px"> ₽</sup>
                      </h3>
 

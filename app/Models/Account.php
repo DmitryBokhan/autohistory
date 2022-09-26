@@ -191,7 +191,7 @@ class Account extends Model
     {
         Account::create([
             'user_id' => $user_id,
-            'sum' => $sum,
+            'sum' => str_replace(" ", "", $sum),
             'operation_id' => 1 //зачисление свободных средств на счет инвестора
         ]);
     }
@@ -222,8 +222,5 @@ class Account extends Model
         }
 
     }
-
-
-
 
 }
