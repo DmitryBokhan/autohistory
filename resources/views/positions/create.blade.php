@@ -162,6 +162,12 @@
                         <h3 class="card-title">Стоимость | доставка | подготовка</h3>
                     </div>
                     <div class="card-body">
+                        <div class="row mt-2 mb-4 ml-2">
+                            <div class="custom-control custom-checkbox">
+                                <input name="is_realization" class="custom-control-input custom-control-input-danger" type="checkbox" id="customCheckbox4" >
+                                <label for="customCheckbox4" class="custom-control-label">Под реализацию</label>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">

@@ -195,6 +195,11 @@
                         <h3 class="card-title">Стоимость | доставка | подготовка</h3>
                     </div>
                     <div class="card-body">
+                        @if($position->is_realization == true)
+                        <div class="row">
+                            <h4 class="text-danger"><span class="right badge badge-danger">Продажа под реализацию</span></h4>
+                        </div>
+                        @endif
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">

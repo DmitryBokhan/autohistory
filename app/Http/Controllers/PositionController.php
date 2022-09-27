@@ -68,7 +68,6 @@ class PositionController extends Controller
      */
     public function store(StoreRequest $request)
     {
-
         //валидация вынесена в StoreRequest
 
         $user_id = auth()->user()->id;
@@ -101,6 +100,7 @@ class PositionController extends Controller
             'car_id' => $car_id,
             'year' => $request->year,
             'gos_number' => $request->gos_number,
+            'is_realization' => $request->has('is_realization') ? true : false,
             'purchase_date' => $request->purchase_date,
             'purchase_cost' => str_replace(" ", "",$request->purchase_cost),
             'sale_cost_plan' => str_replace(" ", "", $request->sale_cost_plan),

@@ -35,6 +35,7 @@
                             <p class="text-center">
                                 <strong>Цели инвестирования</strong>
                             </p>
+                            @if($position->is_realization == false)
                             <div class="progress-group">
                                 <span class="progress-text">Покупка автомобиля ({{ $position->getPercentInvestPurchase() }}%)</span>
                                 <span class="float-right">Инв-но <b><span data-sum="">{{$position->getSumInvestPurchase()}}</span>р.</b> из <b><span data-sum="">{{$position->purchase_cost}}</span>р.</b> | еще нужно: <b><span data-sum-need="">{{$position->purchase_cost - $position->getSumInvestPurchase()}}</span>р.</b></span>
@@ -42,6 +43,7 @@
                                     <div class="progress-bar bg-danger bg-primary" style="width: {{ $position->getPercentInvestPurchase() }}%"></div>
                                 </div>
                             </div>
+                            @endif
                             <div class="progress-group">
                                 <span class="progress-text">Доставка автомобиля ({{ $position->getPercentInvestDelivery() }}%)</span>
                                 <span class="float-right">Инв-но <b><span data-sum="">{{$position->getSumInvestDelivery()}}</span>р.</b> из <b><span data-sum="">{{$position->delivery_cost_plan}}</span>р.</b> | еще нужно: <b><span data-sum-need="">{{$position->delivery_cost_plan - $position->getSumInvestDelivery()}}</span>р.</b></span>
@@ -156,6 +158,7 @@
             var m = Math.pow(10,n);
             return Math.round(x*m)/m;
         }
+        const PROFIT_POSITION = {{$position->CalcProfit()}};
         const PROFIT_OWN = Number({{$position->CalcSumProfitOwn()}});
         const SUM_INVEST = Number({{App\Models\Account::getSumAccountsInPositionById($position->id)}}); //сумма всех ивсестированных средств
 
@@ -181,7 +184,7 @@
                 case("2"): // расчет при схеме "% от прибыли"
                     var sum = Number(input_sum.value.split(' ').join(''));
                     var percent = sum / (SUM_INVEST + sum);
-                    var investor_profit = roundPlus(sum * percent, 0);
+                    var investor_profit = roundPlus(PROFIT_POSITION * percent, 0);
                     document.getElementById('profit_investor').value = investor_profit;
                     profit_own.value = PROFIT_OWN - investor_profit;
                     break;

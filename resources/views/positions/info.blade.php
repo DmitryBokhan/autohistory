@@ -66,23 +66,25 @@
                 <p class="text-center">
                     <strong>Цели инвестирования</strong>
                 </p>
+                @if($position->is_realization == false)
                 <div class="progress-group">
                     <span class="progress-text">Покупка автомобиля ({{ $position->getPercentInvestPurchase() }}%)</span>
-                    <span class="float-right">Инв-но <b><span data-sum="">{{$position->getSumInvestPurchase()}}</span>р.</b> из <b><span data-sum="">{{$position->purchase_cost}}</span>р.</b> | еще нужно: <b><span data-sum-need="">{{$position->purchase_cost - $position->getSumInvestPurchase()}}</span>р.</b></span>
+                    <span class="float-right">Факт <b><span data-sum="">{{$position->getSumInvestPurchase()}}</span>р.</b> план <b><span data-sum="">{{$position->purchase_cost}}</span>р.</b> | еще нужно: <b><span data-sum-need="">{{$position->purchase_cost - $position->getSumInvestPurchase()}}</span>р.</b></span>
                     <div class="progress progress-sm">
                         <div class="progress-bar bg-danger bg-primary" style="width: {{ $position->getPercentInvestPurchase() }}%"></div>
                     </div>
                 </div>
+                @endif
                 <div class="progress-group">
                     <span class="progress-text">Доставка автомобиля ({{ $position->getPercentInvestDelivery() }}%)</span>
-                    <span class="float-right">Инв-но <b><span data-sum="">{{$position->getSumInvestDelivery()}}</span>р.</b> из <b><span data-sum="">{{$position->delivery_cost_plan}}</span>р.</b> | еще нужно: <b><span data-sum-need="">{{$position->delivery_cost_plan - $position->getSumInvestDelivery()}}</span>р.</b></span>
+                    <span class="float-right">Факт <b><span data-sum="">{{$position->getSumInvestDelivery()}}</span>р.</b> план <b><span data-sum="">{{$position->delivery_cost_plan}}</span>р.</b> | еще нужно: <b><span data-sum-need="">{{$position->delivery_cost_plan - $position->getSumInvestDelivery()}}</span>р.</b></span>
                     <div class="progress progress-sm">
                         <div class="progress-bar  bg-warning" style="width: {{ $position->getPercentInvestDelivery() }}%"></div>
                     </div>
                 </div>
                 <div class="progress-group">
                     <span class="progress-text">Подготовка автомобиля ({{ $position->getPercentInvestPreparation() }}%)</span>
-                    <span class="float-right">Инв-но <b><span data-sum="">{{$position->getSumInvestPreparation()}}</span>р.</b> из <b><span data-sum="">{{$position->additional_cost_plan}}</span>р.</b> | еще нужно: <b><span data-sum-need="">{{$position->additional_cost_plan - $position->getSumInvestPreparation()}}</span>р.</b></span>
+                    <span class="float-right">Факт <b><span data-sum="">{{$position->getSumInvestPreparation()}}</span>р.</b> план <b><span data-sum="">{{$position->additional_cost_plan}}</span>р.</b> | еще нужно: <b><span data-sum-need="">{{$position->additional_cost_plan - $position->getSumInvestPreparation()}}</span>р.</b></span>
                     <div class="progress progress-sm">
                         <div class="progress-bar bg-success" style="width: {{ $position->getPercentInvestPreparation() }}%"></div>
                     </div>
@@ -162,7 +164,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12">
+            <div class="col-6">
                 <p class="lead ">Расчеты</p>
                 <div class="table-responsive">
                     <table class="table">
@@ -171,19 +173,22 @@
                             <td data-profit="">{{$position->CalcProfit()}} </td>
                         </tr>
                         <tr>
-                            <th>% прибыльности</th>
+                            <th>% планируемого дохода</th>
                             <td>{{$position->CalcProfitabilityPercent()}}%</td>
                         </tr>
                         <tr>
                             <th>Доход инвеcторов:</th>
-                            <td data-sum="">{{$position->CalcSumProfitInvestors()}}</td>
+                            <td data-profit="">{{$position->CalcSumProfitInvestors()}}</td>
                         </tr>
                         <tr>
                             <th>Мой доход:</th>
-                            <td data-sum="">{{$position->CalcSumProfitOwn()}}</td>
+                            <td data-profit="">{{$position->CalcSumProfitOwn()}}</td>
                         </tr>
                         </tbody></table>
                 </div>
+            </div>
+            <div class="col-6">
+
             </div>
         </div>
     </div>

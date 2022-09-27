@@ -16,7 +16,12 @@ class InvestController extends Controller
     {
         $position = Position::find($position_id);
 
-        $pay_purposes = PayPurpose::get();
+        //если автомобиль получен "под реализацию", то исключаем из списка возможных целей инвестирования пункт "Покупка автомобиля"
+        if($position->is_realization == true){
+            $pay_purposes = PayPurpose::where("id", "<>", 1)->get();
+        }else{
+            $pay_purposes = PayPurpose::get();
+        }
 
         $investors = User::get();
 
@@ -28,16 +33,17 @@ class InvestController extends Controller
     public function store(StoreRequest $request)
     {
         $request->validated();
-
         $user_id = $request->investors;
         $sum = $request->sum;
         $position_id = $request->position_id;
         $invest_scheme_id = $request->schemes;
         $invest_percent = $invest_scheme_id == 1 ? User::find($user_id)->invest_percent : null; //устанавливаем процент инветиций пользователя
         $invest_fixed = $invest_scheme_id == 3 ? str_replace(" ", "", $request->invest_fixed) : null;
-        $pay_purpose_id = $request->pay_purposes;
         $comment = $request->comment;
         $sum = str_replace(" ", "", $sum);
+
+
+        $pay_purpose_id = $request->pay_purposes;
 
         Account::addInvestPosition($user_id, $sum, $position_id, $invest_scheme_id, $invest_percent, $invest_fixed, $pay_purpose_id, $comment);
         return redirect("/position_info/$position_id");
