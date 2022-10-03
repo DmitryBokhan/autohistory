@@ -50,8 +50,8 @@
                                         <td>{{ $position->gos_number }}</td>
                                         <td>{{ $position->purchase_cost }}</td>
                                         <td class="text-center">
-                                            <a class="btn btn-warning btn-sm" href="/position_info/{{$position->id}}">Действия</a>
-                                        </td
+                                            <a class="btn btn-warning btn-sm" href="{{route('position_info', $position->id)}}">ОТКРЫТЬ</a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </table>
@@ -70,7 +70,7 @@
                                     <th>Год выпуска</th>
                                     <th>Гос. номер</th>
                                     <th>Стоимость авто</th>
-                                    <th width="280px">Action</th>
+                                    <th></th>
                                 </tr>
                                 @foreach ($positions_sale as $position)
                                     <tr>
@@ -84,8 +84,8 @@
                                         <td>{{ $position->year }}</td>
                                         <td>{{ $position->gos_number }}</td>
                                         <td>{{ $position->purchase_cost }}</td>
-                                        <td>
-                                            n/a
+                                        <td class="text-center">
+                                            <a class="btn btn-warning btn-sm" href="{{route('position_info', $position->id)}}">ОТКРЫТЬ</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -105,7 +105,7 @@
                                     <th>Год выпуска</th>
                                     <th>Гос. номер</th>
                                     <th>Стоимость авто</th>
-                                    <th width="280px">Action</th>
+                                    <th></th>
                                 </tr>
                                 @foreach ($positions_archive as $position)
                                     <tr>
@@ -119,8 +119,8 @@
                                         <td>{{ $position->year }}</td>
                                         <td>{{ $position->gos_number }}</td>
                                         <td>{{ $position->purchase_cost }}</td>
-                                        <td>
-                                            n/a
+                                        <td class="text-center">
+                                            <a class="btn btn-warning btn-sm" href="{{route('position_info', $position->id)}}">ОТКРЫТЬ</a>
                                         </td>
                                     </tr>
                                 @endforeach

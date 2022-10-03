@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Services\CalculateInvestmentService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\City\City;
@@ -50,7 +51,7 @@ class Position extends Model
      */
     public function accounts()
     {
-        return $this->hasMany(Account::class, 'id', 'position_id');
+        return $this->hasMany(Account::class);
     }
 
     /**
@@ -63,49 +64,61 @@ class Position extends Model
     }
 
     /**
-     * Расситать прибыльность позиции
+     * Рассчитать прибыльность позиции
      * @return mixed
      */
-    public function CalcProfit()
+    public function CalcProfit($sale_cost_fact=null)
     {
-       return $this->sale_cost_plan - abs($this->purchase_cost + $this->additional_cost_plan + $this->delivery_cost_plan);
+
+        $sale_cost = $sale_cost_fact ? $sale_cost_fact : $this->sale_cost_plan;
+
+        return $sale_cost - $this->purchase_cost - $this->getSumInvestPreparation() - $this->getSumInvestDelivery();
+
     }
 
     /**
      * Рассчитать % рентабельности
      * @return float
      */
-    public function CalcProfitabilityPercent()
+    public function CalcProfitabilityPercent($sale_cost_fact=null)
     {
-        return round((($this->CalcProfit() / ($this->purchase_cost + $this->additionl_cost_plan + $this->delivery_cost_plan))*100),2,PHP_ROUND_HALF_DOWN);
+        return ($this->CalcProfit($sale_cost_fact) / ($this->purchase_cost + $this->additionl_cost_plan + $this->delivery_cost_plan))*100;
+
     }
 
 
     /**
-     * Рассчитать сумму дохода инветоров в текушей позиции
+     * Рассчитать сумму дохода инвесторов в текущей позиции
+     * $closed - если true считаем открытые счета, если false - считаем закрытые счета
      * @return float|int
      */
-    public function CalcSumProfitInvestors()
+    public function CalcSumProfitInvestors($sale_cost_fact=null)
     {
-        $accounts = Account::getOpenAccountsInPosition($this->id);
+
+        $accounts = Account::getAccountsInPosition($this->id);
+
         $sum = 0;
         foreach ($accounts as $account)
         {
             if($account->user_id !== $this->user_id)
             {
-                $sum += $account->CalcAccountProfit();
+                $sum += $account->CalcAccountProfit($sale_cost_fact);
             }
         }
         return $sum;
     }
 
     /**
-     * Рассчитать сбственную прибыль в текущей позиции
+     * Рассчитать собственную прибыль в текущей позиции
      * @return float|int
      */
-    public function CalcSumProfitOwn()
+    public function CalcSumProfitOwn($sale_cost_fact=null)
     {
-       return $this->CalcProfit() - $this->CalcSumProfitInvestors();
+        //если позиция в архиве и фактическая стоимость уже установлена
+        if($this->sale_cost_fact != null ){
+            $sale_cost_fact = $this->sale_cost_fact;
+        }
+       return $this->CalcProfit($sale_cost_fact) - $this->CalcSumProfitInvestors($sale_cost_fact);
     }
 
     /**
@@ -116,7 +129,7 @@ class Position extends Model
     {
         $sum = Account::where('position_id', $this->id)
             ->where('pay_purpose_id', 1)
-            ->where('status', 'OPEN')->get()->sum('sum');
+            ->wherein('status', ['OPEN', 'CLOSED'])->get()->sum('sum');
         return abs($sum);
     }
 
@@ -128,11 +141,12 @@ class Position extends Model
     {
         $sum = Account::where('position_id', $this->id)
             ->where('pay_purpose_id', 1)
-            ->where('status', 'OPEN')->get()->sum('sum');
+            ->wherein('status', ['OPEN', 'CLOSED'])->get()->sum('sum');
 
         if($this->purchase_cost){
 
-            return round((abs($sum) / $this->purchase_cost) * 100,2,PHP_ROUND_HALF_DOWN);
+            //return round((abs($sum) / $this->purchase_cost) * 100,2,PHP_ROUND_HALF_DOWN);
+            return (abs($sum) / $this->purchase_cost) * 100;
         }
         return 0;
     }
@@ -145,7 +159,8 @@ class Position extends Model
     {
         $sum = Account::where('position_id', $this->id)
             ->where('pay_purpose_id', 3)
-            ->where('status', 'OPEN')->get()->sum('sum');
+            ->wherein('status', ['OPEN', 'CLOSED'])->get()->sum('sum');
+
         return abs($sum);
     }
 
@@ -157,11 +172,10 @@ class Position extends Model
     {
         $sum = Account::where('position_id', $this->id)
             ->where('pay_purpose_id', 3)
-            ->where('status', 'OPEN')->get()->sum('sum');
+            ->wherein('status', ['OPEN', 'CLOSED'])->get()->sum('sum');
 
         if($this->additional_cost_plan){
-
-            return round((abs($sum) / $this->additional_cost_plan) * 100,2,PHP_ROUND_HALF_DOWN);
+            return (abs($sum) / $this->additional_cost_plan) * 100;
         }
         return 100;
     }
@@ -174,7 +188,8 @@ class Position extends Model
     {
         $sum = Account::where('position_id', $this->id)
             ->where('pay_purpose_id', 2)
-            ->where('status', 'OPEN')->get()->sum('sum');
+            ->wherein('status', ['OPEN', 'CLOSED'])->get()->sum('sum');
+
         return abs($sum);
     }
 
@@ -186,11 +201,10 @@ class Position extends Model
     {
         $sum = Account::where('position_id', $this->id)
             ->where('pay_purpose_id', 2)
-            ->where('status', 'OPEN')->get()->sum('sum');
+            ->wherein('status', ['OPEN', 'CLOSED'])->get()->sum('sum');
 
         if($this->delivery_cost_plan){
-
-            return round((abs($sum) / $this->delivery_cost_plan) * 100,2,PHP_ROUND_HALF_DOWN);
+            return (abs($sum) / $this->delivery_cost_plan) * 100;
         }
         return 100;
     }
@@ -203,5 +217,73 @@ class Position extends Model
     public function getCountPositionOwn($user_id)
     {
         return Position::where('user_id', $user_id)->where('position_status_id', '<>', 3)->get()->count();
+    }
+
+    /**
+     * Установить фактическую стоимость продажи
+     * @param $cost
+     * @return void
+     */
+    public function setSaleCostFact($cost)
+    {
+        $this->update(['sale_cost_fact' => $cost]);
+    }
+
+    /**
+     * Установить фактическую сумму затрат на подготовку
+     * @param $cost
+     * @return void
+     */
+    public function setAdditionalCostFact($cost)
+    {
+        $this->update(['additional_cost_fact' => $cost]);
+    }
+
+    /**
+     * Установить фактическую сумму затрат на подготовку
+     * @param $cost
+     * @return void
+     */
+    public function setDeliveryCostFact($cost)
+    {
+        $this->update(['delivery_cost_fact' => $cost]);
+    }
+
+    /**
+     * Меняет статус позиции (подготовка/продажа)
+     * @return void
+     */
+    public function ChangeStatus()
+    {
+        if($this->position_status_id == 1){
+            $this->update([
+                'position_status_id' => 2,
+                ]);
+        }elseif($this->position_status_id == 2){
+            $this->update([
+                'position_status_id' => 1,
+            ]);
+        }
+    }
+
+    /**
+     * Переводит позицию в архив
+     * @return void
+     */
+    public function setStatusArchive()
+    {
+        $this->update([
+            'position_status_id' => 3,
+        ]);
+    }
+
+    public function close($sale_cost_fact)
+    {
+
+        $calc_position = new CalculateInvestmentService($this, $sale_cost_fact);
+
+
+        $calc_position->ExecuteCalculation(); //производим все расчеты по инвестициям и закрываем позицию
+
     }
 }

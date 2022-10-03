@@ -24,10 +24,10 @@
 <table class="table table-bordered">
 <tr>
     <th>No</th>
-    <th>Name</th>
+    <th>Имя</th>
     <th>Email</th>
-    <th>Roles</th>
-    <th width="280px">Action</th>
+    <th>Роль</th>
+    <th width="380px">Действие</th>
 </tr>
 @foreach ($data as $key => $user)
 <tr>
@@ -42,13 +42,13 @@
     @endif
     </td>
     <td>
-        <a class="btn btn-info" href="{{ route('users.show',$user->id) }}">Show</a>
+        <a class="btn btn-info" href="{{ route('users.show',$user->id) }}">Просмотр</a>
         @can('user-edit')
-        <a class="btn btn-primary" href="{{ route('users.edit',$user->id) }}">Edit</a>
+        <a class="btn btn-primary" href="{{ route('users.edit',$user->id) }}">Редактировать</a>
         @endcan
         @can('user-delete')
         {!! Form::open(['method' => 'DELETE','route' => ['users.destroy', $user->id],'style'=>'display:inline']) !!}
-            {!! Form::submit('Delete', ['class' => 'btn btn-danger delete-btn']) !!}
+            {!! Form::submit('Удалить', ['class' => 'btn btn-danger delete-btn']) !!}
         {!! Form::close() !!}
         @endcan
     </td>

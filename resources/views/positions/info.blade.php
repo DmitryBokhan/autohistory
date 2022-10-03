@@ -13,7 +13,7 @@
                      Информация о позиции
                     <a class="btn bg-gradient-warning btn-outline-secondary btn-sm" href="{{ route('position.edit',$position->id) }}"><i class="fas fa-edit"></i></a>
 
-                    <small class="float-right">ID: 15</small>
+                    <small class="float-right">ID: {{$position->id}}</small>
                 </h4>
             </div>
         </div>
@@ -89,22 +89,131 @@
                         <div class="progress-bar bg-success" style="width: {{ $position->getPercentInvestPreparation() }}%"></div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-6 mt-4">
+                        <div class="card  flex-grow h-100 ">
+                            <div class="card-header">
+                                <h3 class="card-title">Статус позиции</h3>
+                            </div>
+
+                            <div class="card-body">
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                                <div class="row justify-content-around mb-2">
+                                    @if($position->position_status_id == 1)
+                                        <h3 class="text-danger"><span class="right badge badge-danger">ПОДГОТОВКА</span></h3>
+                                    @elseif($position->position_status_id == 2)
+                                        <h3 class="text-success"><span class="right badge badge-success">ПРОДАЖА</span></h3>
+                                    @elseif($position->position_status_id == 3)
+                                        <h3 class="text-success"><span class="right badge badge-success">АРХИВ</span></h3>
+                                    @endif
+                                </div>
+                                <form action="{{route('position_info.change_status', $position->id)}}" method="POST">
+                                    @csrf
+                                    <div class="form-group">
+                                        @if($position->position_status_id == 1)
+                                            <button type="submit" class="btn btn-block  bg-gradient-success btn-flat">В продажу</button>
+                                        @elseif($position->position_status_id == 2)
+                                            <button type="submit" class="btn btn-block  bg-gradient-warning btn-flat">Вернуть в подготовку</button>
+                                        @endif
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    @if($position->position_status_id == 2)
+                    <div class="col-6 mt-4">
+                        <div class="card flex-grow h-100">
+                            <div class="card-header">
+                                <h3 class="card-title">Фактическая стоимость продажи</h3>
+                            </div>
+                            <div class="card-body">
+                                <form action="{{ route('position_info',$position->id) }}" method="POST">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <input type="text" class="form-control" data-sum="" name="sale_cost_fact" value="{{$sale_cost_fact ? $sale_cost_fact : $position->sale_cost_plan}}"></input>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-block  bg-gradient-success btn-flat">Рассчитать</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
             </div>
-            <div class="col-md-5">
-                <div class="row mt-4">
+            <div class="col-5">
+                <div class="row mt-2">
+                    <div class="col-ms-6 col-6">
+                        <div class="description-block">
+                            <span class="description-text">ЗАТРАТЫ НА ПОКУПКУ</span>
+                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->purchase_cost}}</h4>
+                        </div>
+                    </div>
+                    <div class="col-ms-6 col-6">
+                        <div class="description-block border-left">
+                            <span class="description-text">ФАКТ ПРОДАЖА</span>
+                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$sale_cost_fact ? $sale_cost_fact : $position->sale_cost_plan}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-ms-6 col-6">
+                        <div class="description-block">
+                            <span class="description-text">ФАКТ ДОСТАВКА</span>
+                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->getSumInvestDelivery()}}</h4>
+                        </div>
+                    </div>
+                    <div class="col-ms-6 col-6">
+                        <div class="description-block border-left">
+                            <span class="description-text">ФАКТ ПОДГОТОВКА</span>
+                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->getSumInvestPreparation()}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
                     <div class="col-ms-6 col-6">
                         <div class="description-block">
                             <span class="description-text">ДОХОД ИНВЕТОРОВ</span>
-                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->CalcSumProfitInvestors()}}</h4>
+                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->CalcSumProfitInvestors($sale_cost_fact)}}</h4>
                         </div>
                     </div>
                     <div class="col-ms-6 col-6">
                         <div class="description-block border-left">
                             <span class="description-text">МОЙ ДОХОД С ПОЗИЦИИ</span>
-                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->CalcSumProfitOwn()}}</h4>
+                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->CalcSumProfitOwn($sale_cost_fact)}}</h4>
                         </div>
                     </div>
-
+                </div>
+                <div class="row mt-3 justify-content-center">
+                    @if($sale_cost_fact)
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <a type="button" href="{{ route('position_info',$position->id) }}" class="btn btn-block  bg-gradient-warning btn-flat">Отмена</a>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <form action="{{ route('position_info.position_close', $position->id) }}" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <input type="hidden" name="sale_cost_fact" value="{{$sale_cost_fact}}">
+                                    <button type="submit" class="btn btn-block  bg-gradient-danger btn-flat">Подтвердить продажу</button>
+                                </div>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -143,10 +252,14 @@
                             <td data-sum="">{{abs($account->sum)}}</td>
                             <td>{{$account->showInvestPercent() ? $account->showInvestPercent() : '-' }}</td>
                             <td data-sum="">{{$account->invest_fixed ? $account->invest_fixed : "" }}</td>
-                            <td data-sum="">{{$account->CalcAccountProfit()}}</td>
+                            <td data-profit="">{{$account->CalcAccountProfit($sale_cost_fact)}}</td>
                             <td>
-                                <a class="btn bg-gradient-warning btn-outline-secondary btn-sm" href="#"><i class="fas fa-edit"></i></a>
-                                <a class="btn bg-gradient-danger btn-outline-secondary btn-sm" href="#"><i class="fas fa-trash"></i></a>
+                                @if($position->position_status_id == 1)
+                                    <form action="{{ route('invest_position.account_delete', $account->id) }}" method="POST">
+                                        @csrf
+                                        <button class="btn bg-gradient-danger btn-outline-secondary btn-sm" type="submit"><i class="fas fa-trash"></i></button>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -155,40 +268,38 @@
                 @if(count($accounts) == 0)
                     <p class="text-danger">Еще ни один инвестор не решился на это. Будь первым! </p>
                 @endif
-                <div class="row mb-4">
-                    <div class="col-12 text-left">
-                        <a class="btn bg-gradient-warning btn-outline-secondary btn-sm" href="{{route('invest_position.create', $position->id)}}">+ Добавить инвестора</a>
+                @if($position->position_status_id == 1)
+                    <div class="row mb-4">
+                        <div class="col-12 text-left">
+                            <a class="btn bg-gradient-warning btn-outline-secondary btn-sm" href="{{route('invest_position.create', $position->id)}}">+ Добавить инвестора</a>
+                        </div>
                     </div>
-                </div>
-
+                @endif
             </div>
         </div>
-        <div class="row">
+        <div class="row align-items-center">
             <div class="col-6">
                 <p class="lead ">Расчеты</p>
                 <div class="table-responsive">
                     <table class="table">
                         <tbody><tr>
                             <th style="width:50%">Ожидаемй доход от продажи позиции (общий):</th>
-                            <td data-profit="">{{$position->CalcProfit()}} </td>
+                            <td data-profit="">{{$position->CalcProfit($sale_cost_fact, $position->getSumInvestDelivery(), $position->getSumInvestPreparation())}} </td>
                         </tr>
                         <tr>
-                            <th>% планируемого дохода</th>
-                            <td>{{$position->CalcProfitabilityPercent()}}%</td>
+                            <th>% планируемой прибыли</th>
+                            <td>{{$position->CalcProfitabilityPercent($sale_cost_fact)}}%</td>
                         </tr>
                         <tr>
                             <th>Доход инвеcторов:</th>
-                            <td data-profit="">{{$position->CalcSumProfitInvestors()}}</td>
+                            <td data-profit="">{{$position->CalcSumProfitInvestors($sale_cost_fact)}}</td>
                         </tr>
                         <tr>
                             <th>Мой доход:</th>
-                            <td data-profit="">{{$position->CalcSumProfitOwn()}}</td>
+                            <td data-profit="">{{$position->CalcSumProfitOwn($sale_cost_fact)}}</td>
                         </tr>
                         </tbody></table>
                 </div>
-            </div>
-            <div class="col-6">
-
             </div>
         </div>
     </div>

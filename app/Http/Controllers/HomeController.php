@@ -29,7 +29,7 @@ class HomeController extends Controller
         //dd(AppSetting::getDefaultPercentInvest());
         $user_count = User::get()->count();
         $balance = Account::getBalance(auth()->user()->id); //получим баланс свободных средств текущего пользователя
-        $balance_invest = Account::getBalanceInvest(auth()->user()->id);////получим баланс инвестированных средств текущего пользователя
+        $balance_invest = Account::getBalanceInvestOpen(auth()->user()->id);////получим баланс инвестированных средств текущего пользователя
         return view('dashboard.home.index', ['user_count' => $user_count, 'balance'=>$balance, 'balance_invest' => $balance_invest]);
     }
 

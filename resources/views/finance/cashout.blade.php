@@ -1,6 +1,8 @@
 @extends('layouts.dashboard_layout')
 
-@section('title', 'Приход')
+@section('title', 'Расходы')
+
+@section('content')
 
 @section('content')
 
@@ -21,13 +23,13 @@
         </div>
     @endif
 
-    <form action="{{ route('receipt.store') }}" method="POST">
+    <form action="{{ route('cashout.store') }}" method="POST">
         @csrf
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 mt-4">
                 <div class="card card-warning">
                     <div class="card-header">
-                        <h3 class="card-title">Приход средств</h3>
+                        <h3 class="card-title">Расход средств</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -47,13 +49,13 @@
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
-                                    <label for="sum">Сумма прихода</label>
+                                    <label for="sum">Сумма выводимых средств</label>
                                     <input type="text" name="sum" data-sum="" class="form-control" placeholder="Сумма">
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 text-center mb-2">
-                            <button type="submit" class="btn btn-primary">Внести</button>
+                            <button type="submit" class="btn btn-primary">Вывести средства</button>
                         </div>
                     </div>
                 </div>

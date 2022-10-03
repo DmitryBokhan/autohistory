@@ -9,6 +9,7 @@ use App\Models\Account;
 use App\Http\Requests\Position\StoreRequest;
 use App\Http\Requests\Position\UpdateRequest;
 use Illuminate\Database\QueryException;
+use App\Http\Services\CalculateInvestmentService;
 
 class PositionController extends Controller
 {
@@ -94,7 +95,7 @@ class PositionController extends Controller
         }
 
     try {
-        Position::create([
+       $position =  Position::create([
             'user_id' => $user_id,
             'position_status_id' => 1,
             'car_id' => $car_id,
@@ -116,8 +117,7 @@ class PositionController extends Controller
             ->withInput()
             ->withErrors(['error' => 'Ошибка запонения формы']);
     }
-        return redirect()->route('positions.index')
-            ->with('success','Позиция успешно добавлена');
+        return redirect()->route('position_info', $position->id);
     }
 
     public function edit($position_id)
@@ -205,13 +205,18 @@ class PositionController extends Controller
      * @param Request $request
      * @return void
      */
-    public function info($position_id)
+    public function info(Request $request,$position_id)
     {
+        $sale_cost_fact = str_replace(" ", "", $request->sale_cost_fact);
         $position = Position::find($position_id);
 
-        $accounts = Account::where('position_id', $position_id)->get();
+        if(in_array($position->position_status_id,[1,2])){
+            $accounts = Account::where('position_id', $position_id)->where('status', 'OPEN')->get();
+        }elseif($position->position_status_id == 3){
+            $accounts = Account::where('position_id', $position_id)->where('status', 'CLOSED')->get();
+        }
 
-        return view('positions.info', compact('position', 'accounts'));
+        return view('positions.info', compact('position', 'accounts', 'sale_cost_fact'));
     }
 
     public function cars_ajax(Request $request)
@@ -291,6 +296,46 @@ class PositionController extends Controller
             }
         }
 
+    }
+
+
+    /**
+     * Меняет статус позици (подготовка<->продажа)
+     * @param $position_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function change_status($position_id)
+    {
+        //валидация вынесена в ChangeStatusRequest
+
+        $position = Position::find($position_id);
+
+        if($position->is_realization == false && $position->getSumInvestPurchase() < $position->purchase_cost){
+            return redirect()->route('position_info', $position_id)->withErrors("Для смены статуса, необходимо проинвестировать покупку автомобиля на 100%!");
+        }elseif($position->is_realization == false && $position->getSumInvestPurchase() >= $position->purchase_cost){
+            $position->ChangeStatus();
+            return redirect()->route('position_info', $position_id);
+        }elseif($position->is_realization == true){
+            $position->ChangeStatus();
+            return redirect()->route('position_info', $position_id);
+        }
+
+    }
+
+    /**
+     * Закрывем позицию
+     * @param Request $request
+     * @param $position_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function position_close(Request $request, $position_id)
+    {
+
+        $position = Position::find($position_id);
+
+        $position->close($request->sale_cost_fact); // передаем фактическую сумму продажи и закрываем позицию
+
+        return redirect()->route('position_info', $position_id);
     }
 
 }

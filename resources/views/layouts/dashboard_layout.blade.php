@@ -194,7 +194,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('cashout.index') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Расход</p>
                 </a>

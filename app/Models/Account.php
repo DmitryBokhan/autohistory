@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use phpDocumentor\Reflection\Types\Collection;
 
 class Account extends Model
@@ -47,6 +48,16 @@ class Account extends Model
 
 
     /**
+     * Получить позицию привязанную к инвестиции
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function position()
+    {
+       return $this->belongsTo(Position::class);
+    }
+
+
+    /**
      * Получить баланс свободных средств пользователя
      * @param $user_id
      * @return float
@@ -57,11 +68,24 @@ class Account extends Model
     }
 
     /**
-     * Получить баланс всех инвестированных средств пользователя
+     * Получить баланс всех инвестированных средств пользователя в позиции
      * @param $user_id
      * @return float
      */
     public function getBalanceInvest($user_id)
+    {
+        $balance = Account::where('user_id', $user_id)->where('operation_id', 7)->wherein('status', ['OPEN', 'CLOSED'])->get()->sum('sum');
+        return abs($balance);
+    }
+
+
+
+    /**
+     * Получить баланс всех инвестированных средств пользователя в позиции со статусом OPEN
+     * @param $user_id
+     * @return float
+     */
+    public function getBalanceInvestOpen($user_id)
     {
         $balance = Account::where('user_id', $user_id)->where('operation_id', 7)->where('status', 'OPEN')->get()->sum('sum');
         return abs($balance);
@@ -104,9 +128,29 @@ class Account extends Model
      * @param $account_id
      * @return void
      */
-    protected function setStatusClosed($account_id)
+    public function setStatusClosed($account_id)
     {
         Account::where('id', $account_id)->update(['status' => 'CLOSED']);
+    }
+
+    /**
+     * Установить статус инвестиции как удаленная инвестиция
+     * @param $account_id
+     * @return void
+     */
+    public function setStatusDeleted($account_id)
+    {
+        Account::where('id', $account_id)->update(['status' => 'DELETED']);
+    }
+
+    /**
+     * Получить все инвестиции по id позиции
+     * @param $position_id
+     * @return array
+     */
+    public function getAccountsInPosition($position_id)
+    {
+        return Account::where('position_id', $position_id)->wherein('status', ['OPEN', 'CLOSED'])->get();
     }
 
     /**
@@ -120,6 +164,16 @@ class Account extends Model
     }
 
     /**
+     * Получить все закрытые инвестиции по id позиции
+     * @param $position_id
+     * @return array
+     */
+    public function getClosedAccountsInPosition($position_id)
+    {
+        return Account::where('position_id', $position_id)->where('status', 'CLOSED')->get();
+    }
+
+    /**
      * Получить сумму всех инвестированных средств в позицию
      * @return float|int
      */
@@ -128,7 +182,7 @@ class Account extends Model
 
         $sum = Account::where('position_id', $this->position_id)
             ->where('operation_id', 7)
-            ->where('status', 'OPEN')->get()->sum('sum');
+            ->wherein('status', ['OPEN', 'CLOSED'])->get()->sum('sum');
         return abs($sum);
     }
 
@@ -141,7 +195,7 @@ class Account extends Model
 
         $sum = Account::where('position_id', $position_id)
             ->where('operation_id', 7)
-            ->where('status', 'OPEN')->get()->sum('sum');
+            ->wherein('status', ['OPEN', 'CLOSED'])->get()->sum('sum');
         return abs($sum);
     }
 
@@ -152,8 +206,8 @@ class Account extends Model
      */
     public function getPartPercent()
     {
-        $result = abs($this->sum) / $this->getSumAccountsInPosition() * 100;
-        return round($result,2,PHP_ROUND_HALF_DOWN);
+        $result = (abs($this->sum) / $this->getSumAccountsInPosition()) * 100;
+        return $result;
     }
 
     /**
@@ -183,44 +237,79 @@ class Account extends Model
 
 
     /**
-     * Добавить свободные средства на счет инвестора
-     * @param $request
+     *    /**
+     * Добавить счет
+     * Операции (operation_id):
+     * 1 - Зачисление свободных средств
+     * 2 - Зачисление вложенных ранее средств
+     * 3 - Зачисление % от вклада
+     * 4 - Зачисление прибыли от продажи на счет создателя позиции (не включая прибыли от инвестиции)
+     * 5 - Зачисление удаленной из позиции инвестиции (возврат)
+     * 6 - Зачисление от другого инвестора
+     * 7 - Инвестиция в позицию
+     * 8 - Вывод свободных средств из системы
+     * 9 - Перевод свободных средств другому инвестору
+     * 10 - Зачисление доли от прибыли
+     * 11 - Зачисление фиксированной прибыли
+     * @param $user_id
+     * @param $sum
+     * @param $operation_id
+     * @param $position_id
+     * @param $invest_scheme_id
+     * @param $invest_percent
+     * @param $invest_fixed
+     * @param $pay_purpose_id
      * @return void
      */
-    public function addDepositIntoAccount($user_id, $sum)
+    public function addAccount($user_id, $sum, $operation_id, $position_id = null, $invest_scheme_id = null, $invest_percent = null, $invest_fixed = null, $pay_purpose_id = null)
     {
         Account::create([
             'user_id' => $user_id,
             'sum' => str_replace(" ", "", $sum),
-            'operation_id' => 1 //зачисление свободных средств на счет инвестора
+            'operation_id' => $operation_id, //зачисление свободных средств на счет инвестора
+            'position_id' => $position_id,
+            'invest_scheme_id' => $invest_scheme_id,
+            'invest_percent' => $invest_percent,
+            'invest_fixed' => $invest_fixed,
+            'pay_purpose_id' => $pay_purpose_id,
+            'comment' => "Операцию совершил пользователь: " . Auth::user()->name . " с ID: ". Auth::user()->id,
         ]);
     }
 
     /**
-     * Рассчиталь прибыль по инветиции
+     * Рассчитать прибыль по инвестиции
      * @return float|int
      */
-    public function CalcAccountProfit()
+    public function CalcAccountProfit($sale_cost_fact=null)
     {
         $scheme = $this->invest_scheme_id;
         switch($scheme)
         {
             case(1): //"% от вклада"
                 return abs($this->sum) * $this->invest_percent / 100;
-                break;
             case(2): //% от прибыли
                 $position = Position::find($this->position_id);
-                $result = $position->CalcProfit() * ($this->getPartPercent() / 100);
-                return round($result,2,PHP_ROUND_HALF_DOWN);
-                break;
+                $result = $position->CalcProfit($sale_cost_fact) * ($this->getPartPercent() / 100);
+                return $result;
             case(3): //фиксированная сумма
                 return $this->invest_fixed;
-                break;
             case(4): //без схемы расчета
                 return 0;
-                break;
         }
 
+    }
+
+    /**
+     * Удаляем (устанавливаем статус DELETED для счета) и зачисляем сумму обратно инвестору.
+     * @param $account_id
+     * @return void
+     */
+    public function deleteAccount($account_id)
+    {
+
+        $account = Account::find($account_id);
+        Account::setStatusDeleted($account_id);
+        Account::addAccount($account->user_id, abs($account->sum), 5, $account->position_id,  null, null, null, $account->pay_purpose_id);
     }
 
 }
