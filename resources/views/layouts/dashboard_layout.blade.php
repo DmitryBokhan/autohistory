@@ -165,7 +165,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('investors.index') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                   <p>Инвесторы</p>
                 </a>
@@ -199,6 +199,12 @@
                     <p>Расход</p>
                 </a>
               </li>
+                <li class="nav-item">
+                    <a href="{{ route('transaction.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Перевод</p>
+                    </a>
+                </li>
             </ul>
           </li>
           @can("user-list")

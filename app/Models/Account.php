@@ -78,7 +78,10 @@ class Account extends Model
         return abs($balance);
     }
 
-
+    public function getAllMoney($user_id)
+    {
+        return self::getBalance($user_id) + self::getBalanceInvestOpen($user_id);
+    }
 
     /**
      * Получить баланс всех инвестированных средств пользователя в позиции со статусом OPEN
@@ -91,6 +94,19 @@ class Account extends Model
         return abs($balance);
     }
 
+    /**
+     * Получить сумму всех свободных средств инвесторов
+     * @return float|int
+     */
+    public function getBalanceFreeMoneyInvestors()
+    {
+        $sum=0;
+        $investors = User::role('investor')->get();
+        foreach ($investors as $investor){
+           $sum += self::getBalance($investor->id);
+        }
+        return $sum;
+    }
 
 
     /**
@@ -289,7 +305,11 @@ class Account extends Model
                 return abs($this->sum) * $this->invest_percent / 100;
             case(2): //% от прибыли
                 $position = Position::find($this->position_id);
-                $result = $position->CalcProfit($sale_cost_fact) * ($this->getPartPercent() / 100);
+                if($position->position_status_id == 3){
+                    $result = $position->CalcProfit($position->sale_cost_fact) * ($this->getPartPercent() / 100);
+                }else{
+                    $result = $position->CalcProfit($sale_cost_fact) * ($this->getPartPercent() / 100);
+                }
                 return $result;
             case(3): //фиксированная сумма
                 return $this->invest_fixed;

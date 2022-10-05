@@ -11,7 +11,9 @@
             <div class="col-12">
                 <h4>
                      Информация о позиции
-                    <a class="btn bg-gradient-warning btn-outline-secondary btn-sm" href="{{ route('position.edit',$position->id) }}"><i class="fas fa-edit"></i></a>
+                    @if($position->position_status_id != 3)
+                        <a class="btn bg-gradient-warning btn-outline-secondary btn-sm" href="{{ route('position.edit',$position->id) }}"><i class="fas fa-edit"></i></a>
+                    @endif
 
                     <small class="float-right">ID: {{$position->id}}</small>
                 </h4>
@@ -44,10 +46,23 @@
                     <li class="list-group-item"><h5>Стоимость и подготовка</h5></li>
                     <li class="list-group-item"><b>Стоимость автомобиля:</b> <span data-sum="">{{ $position->purchase_cost }}</span> ₽</li>
                     <li class="list-group-item"><b>Планируемая стоимость продажи:</b> <span data-sum="">{{ $position->sale_cost_plan }}</span> ₽</li>
+                    @if($position->position_status_id == 3)
+                        <li class="list-group-item"><b>Фактическая стоимость продажи:</b> <span data-sum="">{{ $position->sale_cost_fact }}</span> ₽</li>
+                    @endif
                     <li class="list-group-item"><b>Планируемые расходы на доставку:</b> <span data-sum="">{{ $position->delivery_cost_plan }}</span> ₽</li>
+                    @if($position->position_status_id == 3)
+                        <li class="list-group-item"><b>Фактические расходы на доставку:</b> <span data-sum="">{{ $position->delivery_cost_fact }}</span> ₽</li>
+                    @endif
                     <li class="list-group-item"><b>Планируемые расходы на подготовку:</b> <span data-sum="">{{ $position->additional_cost_plan }}</span> ₽</li>
+                    @if($position->position_status_id == 3)
+                        <li class="list-group-item"><b>Фактические расходы на подготовку:</b> <span data-sum="">{{ $position->additional_cost_fact }}</span> ₽</li>
+                    @endif
                     <li class="list-group-item"><b>Дата начала подготовки:</b> {{ $position->preparation_start }}</li>
+
                     <li class="list-group-item"><b>Планируемое время подготовки (дней):</b> {{ $position->preparation_plan }}</li>
+                    @if(in_array($position->position_status_id ,[2,3]))
+                        <li class="list-group-item"><b>Фактическое время подготовки (дней):</b> {{ $position->getPreparationFact() }}</li>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -165,7 +180,11 @@
                     <div class="col-ms-6 col-6">
                         <div class="description-block border-left">
                             <span class="description-text">ФАКТ ПРОДАЖА</span>
-                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$sale_cost_fact ? $sale_cost_fact : $position->sale_cost_plan}}</h4>
+                            @if($position->position_status_id == 3)
+                                <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->sale_cost_fact}}</h4>
+                            @else
+                                <h4 class="text-success text-lg-center mt-2" data-profit="">{{$sale_cost_fact ? $sale_cost_fact : $position->sale_cost_plan}}</h4>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -173,13 +192,21 @@
                     <div class="col-ms-6 col-6">
                         <div class="description-block">
                             <span class="description-text">ФАКТ ДОСТАВКА</span>
-                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->getSumInvestDelivery()}}</h4>
+                            @if($position->position_status_id == 3)
+                                <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->delivery_cost_fact}}</h4>
+                            @else
+                                <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->getSumInvestDelivery()}}</h4>
+                            @endif
                         </div>
                     </div>
                     <div class="col-ms-6 col-6">
                         <div class="description-block border-left">
                             <span class="description-text">ФАКТ ПОДГОТОВКА</span>
-                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->getSumInvestPreparation()}}</h4>
+                            @if($position->position_status_id == 3)
+                                <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->additional_cost_fact}}</h4>
+                            @else
+                                <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->getSumInvestPreparation()}}</h4>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -187,13 +214,21 @@
                     <div class="col-ms-6 col-6">
                         <div class="description-block">
                             <span class="description-text">ДОХОД ИНВЕТОРОВ</span>
-                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->CalcSumProfitInvestors($sale_cost_fact)}}</h4>
+                            @if($position->position_status_id == 3)
+                                <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->CalcSumProfitInvestors($position->sale_cost_fact)}}</h4>
+                            @else
+                                <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->CalcSumProfitInvestors($sale_cost_fact)}}</h4>
+                            @endif
                         </div>
                     </div>
                     <div class="col-ms-6 col-6">
                         <div class="description-block border-left">
                             <span class="description-text">МОЙ ДОХОД С ПОЗИЦИИ</span>
-                            <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->CalcSumProfitOwn($sale_cost_fact)}}</h4>
+                            @if($position->position_status_id == 3)
+                                <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->CalcSumProfitOwn($position->sale_cost_fact)}}</h4>
+                            @else
+                                <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->CalcSumProfitOwn($sale_cost_fact)}}</h4>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -237,7 +272,11 @@
                         <th>Сумма</th>
                         <th>%</th>
                         <th>Фикс</th>
-                        <th>Ожидаемая доходность</th>
+                        @if($position->position_status_id == 3)
+                            <th>Фактический доход</th>
+                        @else
+                            <th>Ожидаемая доходность</th>
+                        @endif
                         <th></th>
                     </tr>
                     </thead>
@@ -252,7 +291,11 @@
                             <td data-sum="">{{abs($account->sum)}}</td>
                             <td>{{$account->showInvestPercent() ? $account->showInvestPercent() : '-' }}</td>
                             <td data-sum="">{{$account->invest_fixed ? $account->invest_fixed : "" }}</td>
-                            <td data-profit="">{{$account->CalcAccountProfit($sale_cost_fact)}}</td>
+                            @if($position->position_status_id == 3)
+                                <td data-profit="">{{$account->CalcAccountProfit($position->sale_cost_fact)}}</td>
+                            @else
+                                <td data-profit="">{{$account->CalcAccountProfit($sale_cost_fact)}}</td>
+                            @endif
                             <td>
                                 @if($position->position_status_id == 1)
                                     <form action="{{ route('invest_position.account_delete', $account->id) }}" method="POST">
@@ -283,20 +326,38 @@
                 <div class="table-responsive">
                     <table class="table">
                         <tbody><tr>
-                            <th style="width:50%">Ожидаемй доход от продажи позиции (общий):</th>
-                            <td data-profit="">{{$position->CalcProfit($sale_cost_fact, $position->getSumInvestDelivery(), $position->getSumInvestPreparation())}} </td>
+                            @if($position->position_status_id == 3)
+                                <th style="width:50%">Фактический доход от продажи позиции (общий):</th>
+                                <td data-profit="">{{$position->CalcProfit($position->sale_cost_fact)}} </td>
+                            @else
+                                <th style="width:50%">Ожидаемй доход от продажи позиции (общий):</th>
+                                <td data-profit="">{{$position->CalcProfit($sale_cost_fact)}} </td>
+                            @endif
                         </tr>
                         <tr>
-                            <th>% планируемой прибыли</th>
-                            <td>{{$position->CalcProfitabilityPercent($sale_cost_fact)}}%</td>
+                            @if($position->position_status_id == 3)
+                                <th>% прибыли</th>
+                                <td>{{$position->CalcProfitabilityPercent($position->sale_cost_fact)}}%</td>
+                            @else
+                                <th>% планируемой прибыли</th>
+                                <td>{{$position->CalcProfitabilityPercent($sale_cost_fact)}}%</td>
+                            @endif
                         </tr>
                         <tr>
                             <th>Доход инвеcторов:</th>
-                            <td data-profit="">{{$position->CalcSumProfitInvestors($sale_cost_fact)}}</td>
+                            @if($position->position_status_id == 3)
+                                <td data-profit="">{{$position->CalcSumProfitInvestors($position->sale_cost_fact)}}</td>
+                            @else
+                                <td data-profit="">{{$position->CalcSumProfitInvestors($sale_cost_fact)}}</td>
+                            @endif
                         </tr>
                         <tr>
                             <th>Мой доход:</th>
-                            <td data-profit="">{{$position->CalcSumProfitOwn($sale_cost_fact)}}</td>
+                            @if($position->position_status_id == 3)
+                                <td data-profit="">{{$position->CalcSumProfitOwn($position->sale_cost_fact)}}</td>
+                            @else
+                                <td data-profit="">{{$position->CalcSumProfitOwn($sale_cost_fact)}}</td>
+                            @endif
                         </tr>
                         </tbody></table>
                 </div>

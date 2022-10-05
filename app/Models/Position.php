@@ -6,6 +6,7 @@ use App\Http\Services\CalculateInvestmentService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\City\City;
+use Illuminate\Support\Carbon;
 
 class Position extends Model
 {
@@ -256,6 +257,7 @@ class Position extends Model
     public function ChangeStatus()
     {
         if($this->position_status_id == 1){
+            $this->setPreparationEnd();
             $this->update([
                 'position_status_id' => 2,
                 ]);
@@ -275,6 +277,45 @@ class Position extends Model
         $this->update([
             'position_status_id' => 3,
         ]);
+    }
+
+    /**
+     * Установить (сохранить) дату продажи позиции
+     * @return void
+     */
+    public function setSaleDate()
+    {
+        $date = Carbon::now()->format('Y-m-d');
+        $this->update([
+            'sale_date' => $date
+        ]);
+    }
+
+    /**
+     * Установить дату окончания подготовки (если она еще не была установлена)
+     * @return void
+     */
+    public function setPreparationEnd()
+    {
+       if ($this->preparation_end == null){
+           $date = Carbon::now()->format('Y-m-d');
+           $this->update([
+               'preparation_end' => $date
+           ]);
+       }
+    }
+
+    /**
+     * Получить количество дней затраченых на подготовку позиции
+     * @return int|void
+     */
+    public function getPreparationFact()
+    {
+        if($this->preparation_end != null){
+            $start = Carbon::parse($this->purchase_date);
+            $end = Carbon::parse($this->preparation_end);
+            return $start->diffInDays($end);
+        }
     }
 
     public function close($sale_cost_fact)

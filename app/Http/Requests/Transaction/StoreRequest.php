@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\CashOut;
+namespace App\Http\Requests\Transaction;
 
-use App\Rules\UserHasMoneyForCashOut;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\UserHasMoneyForTransaction;
 
 class StoreRequest extends FormRequest
 {
@@ -26,7 +26,7 @@ class StoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'sum.not_in' => 'Сумма вывода средств должна быть больше 0',
+            'sum.not_in' => 'Сумма перевода должна быть больше 0',
         ];
     }
 
@@ -38,7 +38,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'sum' => ['required', Rule::notIn(['0']), new UserHasMoneyForCashOut()]
+            'sum' => ['required', Rule::notIn(['0']), new UserHasMoneyForTransaction()]
         ];
     }
 }

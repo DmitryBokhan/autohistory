@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InvestorController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,7 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\InvestController;
 use App\Http\Controllers\CashOutController;
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,13 +78,25 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/cashout', [CashOutController::class, 'index'])->name('cashout.index');
     Route::post('/cashout', [CashOutController::class, 'store'])->name('cashout.store');
 
+    //перевод средств
+    Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction.index');
+    Route::post('/transaction', [TransactionController::class, 'store'])->name('transaction.store');
+
     //страница добавления инвестиции
     Route::get('/invest_position/{position_id}/create',[InvestController::class, 'create'])->name('invest_position.create');
 
     //добавить инвестицию
     Route::post('/invest_position/store', [InvestController::class, 'store'])->name('invest_position.store');
-
+    //удалить инвестицию
     Route::post('/invest_position/account/{account_id}/delete', [InvestController::class, 'delete'])->name('invest_position.account_delete');
+
+    //список инвесторов
+    Route::get('/investors', [InvestorController::class, 'index'])->name('investors.index');
+
+    //профиль инвестора (форма для редактирования)
+    Route::post('/investor_settings/{user_id}', [InvestorController::class, 'settings'])->name('investor.settings');
+    //сохранить настройки профиля инвестора
+    Route::post('/investor_settings/{user_id}/update', [InvestorController::class, 'update'])->name('investor.update');
 
 });
 

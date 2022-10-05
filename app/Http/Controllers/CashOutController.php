@@ -12,9 +12,9 @@ class CashOutController extends Controller
 {
     public function index()
     {
-        $investors = User::role('admin')->where('id', Auth::User()->id)->get(); //получим всех инвесторов
+        $investors = User::role('admin')->where('id', Auth::User()->id)->where('is_active', true)->get(); //получим всех инвесторов
 
-        $investors = $investors->merge(User::role('investor')->get());
+        $investors = $investors->merge(User::role('investor')->where('is_active', true)->get());
 
         return view('finance.cashout', compact(['investors']));
     }

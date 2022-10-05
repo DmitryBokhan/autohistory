@@ -23,7 +23,7 @@ class InvestController extends Controller
             $pay_purposes = PayPurpose::get();
         }
 
-        $investors = User::get();
+        $investors = User::where('is_active', true)->get();
 
         $invest_schemes = InvestScheme::get();
 

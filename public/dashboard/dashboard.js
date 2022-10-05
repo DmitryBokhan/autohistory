@@ -186,6 +186,14 @@ $(document).ready(function () {
         alias: "currency",
         digits: 0,
         rightAlign:false,
+        digitsOptional: !1 })
+
+    $('[data-balance]').inputmask({
+        prefix: "",
+        groupSeparator: " ",
+        alias: "currency",
+        digits: 0,
+        rightAlign:false,
         digitsOptional: !1 });
 
     $('[data-profit]').inputmask({

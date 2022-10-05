@@ -14,9 +14,8 @@ class ReceiptController extends Controller
      */
     public function index()
     {
-       // $investors = User::role('investor')->get(); //получим всех инвесторов
-
-        $investors = User::get();
+        
+        $investors = User::where('is_active', true)->get();
 
         return view('finance.receipt', ['investors' => $investors]);
     }

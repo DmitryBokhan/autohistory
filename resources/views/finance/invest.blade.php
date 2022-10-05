@@ -187,7 +187,7 @@
                     case("2"): // расчет при схеме "% от прибыли"
                         var sum = Number(input_sum.value.split(' ').join(''));
                             var percent = sum / (SUM_INVEST + sum);
-                            var investor_profit = roundPlus((PROFIT_POSITION) * percent, 0);
+                            var investor_profit = roundPlus((PROFIT_POSITION - sum) * percent, 0);
                             document.getElementById('profit_investor').value = investor_profit;
                         break;
                     case("3"): // расчет при схеме "фиксированная сумма"

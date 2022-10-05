@@ -48,6 +48,8 @@ class CalculateInvestmentService
         $this->position->setSaleCostFact($this->sale_cost_fact); // сохраняем в БД фактическую стоимость позиции
         $this->position->setAdditionalCostFact($this->position->getSumInvestPreparation()); //сохраняем в БД фактическую сумму затрат на подготовку позиции
         $this->position->setDeliveryCostFact($this->position->getSumInvestDelivery());//сохраняем в БД фактическую сумму затрат на доставку позиции
+        $this->position->setSaleDate(); //сохраняем дату продажи
+
 
 
         foreach ($accounts as $account){
