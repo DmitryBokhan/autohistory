@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\V1\ApiHomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -51,7 +52,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 
 
-//Зашишенные маршруты
+//Защишенные маршруты
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/project', [ApiProjectController::class, 'index']);
     Route::get('/project/{id}', [ApiProjectController::class, 'show']);
@@ -61,4 +62,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/project/{id}', [ApiProjectController::class, 'destroy']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::put('/project/{id}/add_balance/', [ApiProjectController::class, 'add_balance']); //добавить сумму к текущему балансу
+
+    Route::post('/home', [ApiHomeController::class, 'index']);
 });
+
+
+

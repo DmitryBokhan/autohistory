@@ -11,7 +11,7 @@
             <div class="col-12">
                 <h4>
                      Информация о позиции
-                    @if($position->position_status_id != 3)
+                    @if($position->position_status_id == 1)
                         <a class="btn bg-gradient-warning btn-outline-secondary btn-sm" href="{{ route('position.edit',$position->id) }}"><i class="fas fa-edit"></i></a>
                     @endif
 
