@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use phpDocumentor\Reflection\Types\Collection;
 
 class Account extends Model
 {
@@ -134,6 +133,7 @@ class Account extends Model
             'invest_percent' => $invest_percent,
             'invest_fixed' => $invest_fixed,
             'pay_purpose_id' =>$pay_purpose_id,
+            'operation_author_id'=> Auth::user()->id, // создатель/автор текущей операции (счета)
             'comment' => $comment,
             'status' => 'OPEN'
         ]);
@@ -277,17 +277,21 @@ class Account extends Model
      * @param $pay_purpose_id
      * @return void
      */
-    public function addAccount($user_id, $sum, $operation_id, $position_id = null, $invest_scheme_id = null, $invest_percent = null, $invest_fixed = null, $pay_purpose_id = null)
+    public function addAccount($user_id, $sum, $operation_id, $position_id = null, $invest_scheme_id = null, $invest_percent = null, $invest_fixed = null, $pay_purpose_id = null , $recipient_id = null, $account_id = null)
     {
+
         Account::create([
-            'user_id' => $user_id,
-            'sum' => str_replace(" ", "", $sum),
-            'operation_id' => $operation_id, //зачисление свободных средств на счет инвестора
-            'position_id' => $position_id,
-            'invest_scheme_id' => $invest_scheme_id,
-            'invest_percent' => $invest_percent,
-            'invest_fixed' => $invest_fixed,
-            'pay_purpose_id' => $pay_purpose_id,
+            'user_id' => $user_id, // пользователь (операция над счетом пользователя)
+            'sum' => str_replace(" ", "", $sum), // сумма (+-)
+            'operation_id' => $operation_id, //номер операции (см. описание к функции)
+            'position_id' => $position_id, //номер позиции
+            'invest_scheme_id' => $invest_scheme_id, //схема инвестирования
+            'invest_percent' => $invest_percent, //процент инвестиции
+            'invest_fixed' => $invest_fixed, // фиксированная сумма
+            'pay_purpose_id' => $pay_purpose_id, // цель ивестирования (1-покупка/2-доставка/3-подготовка)
+            'operation_author_id'=> Auth::user()->id, // создатель/автор текущей операции (счета)
+            'recipient_id' => $recipient_id, // получатель перевода
+            'account_id' => $account_id, // номер счета который инициировал создание текущего счета (например при переводе средств от другого пользователя)
             'comment' => "Операцию совершил пользователь: " . Auth::user()->name . " с ID: ". Auth::user()->id,
         ]);
     }
@@ -329,7 +333,18 @@ class Account extends Model
 
         $account = Account::find($account_id);
         Account::setStatusDeleted($account_id);
-        Account::addAccount($account->user_id, abs($account->sum), 5, $account->position_id,  null, null, null, $account->pay_purpose_id);
+        Account::addAccount($account->user_id, abs($account->sum), 5, $account->position_id,  null, null, null, $account->pay_purpose_id, null, $account_id);
+    }
+
+    /**
+     * Получить все счета по типу операции
+     * @param $operation_id
+     * @return mixed
+     */
+    public function  getOperationsList($operation_id)
+    {
+        return Account::where('operation_id', $operation_id)->orderByDesc('created_at')->paginate(10);
+
     }
 
 }

@@ -16,7 +16,9 @@ class CashOutController extends Controller
 
         $investors = $investors->merge(User::role('investor')->where('is_active', true)->get());
 
-        return view('finance.cashout', compact(['investors']));
+        $operations = Account::getOperationsList(8);
+
+        return view('finance.cashout', compact(['investors', 'operations']));
     }
 
     //списать со счета средства

@@ -63,4 +63,39 @@
         </div>
     </form>
 
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 mt-4">
+            <div class="card card-warning">
+                <div class="card-header">
+                    <h3 class="card-title">Последнии операции</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <table class="table table-striped">
+                                <tbody>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Инициатор</th>
+                                    <th>Получатель</th>
+                                    <th>Сумма расхода</th>
+                                </tr>
+                                @foreach($operations as $operation)
+                                    <tr>
+                                        <td>{{ $operation->created_at }}</td>
+                                        <td>{{ App\Models\User::find($operation->operation_author_id)->name }}</td>
+                                        <td>{{ $operation->user->name}}</td>
+                                        <td data-sum="" inputmode="numeric">{{ $operation->sum }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                            {{ $operations->links() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection

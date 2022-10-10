@@ -318,13 +318,17 @@ class Position extends Model
         }
     }
 
+    /**
+     * Произвести все расчеты по инвестициям и закрыть позицию
+     * @param $sale_cost_fact
+     * @return void
+     */
     public function close($sale_cost_fact)
     {
 
         $calc_position = new CalculateInvestmentService($this, $sale_cost_fact);
 
-
-        $calc_position->ExecuteCalculation(); //производим все расчеты по инвестициям и закрываем позицию
+        $calc_position->ExecuteCalculation();
 
     }
 }

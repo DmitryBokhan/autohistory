@@ -223,7 +223,7 @@
                     </div>
                     <div class="col-ms-6 col-6">
                         <div class="description-block border-left">
-                            <span class="description-text">МОЙ ДОХОД С ПОЗИЦИИ</span>
+                            <span class="description-text">ДОХОД АВТОРА ПОЗИЦИИ</span>
                             @if($position->position_status_id == 3)
                                 <h4 class="text-success text-lg-center mt-2" data-profit="">{{$position->CalcSumProfitOwn($position->sale_cost_fact)}}</h4>
                             @else
@@ -352,7 +352,7 @@
                             @endif
                         </tr>
                         <tr>
-                            <th>Мой доход:</th>
+                            <th>Доход автора позиции:</th>
                             @if($position->position_status_id == 3)
                                 <td data-profit="">{{$position->CalcSumProfitOwn($position->sale_cost_fact)}}</td>
                             @else
