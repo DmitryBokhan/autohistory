@@ -37,7 +37,7 @@ class UserController extends Controller
     }
 
     /**
-     * Поместить только что созданный ресурс в хранилище.
+     * Создать пользователя.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -59,7 +59,32 @@ class UserController extends Controller
         $user->assignRole($request->input('roles'));
 
         return redirect()->route('users.index')
-                        ->with('success','User created successfully');
+                        ->with('success','Новый пользователь успешно создан');
+    }
+
+    /**
+     * Создать инвестора.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function investor_store(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|same:confirm-password',
+        ]);
+
+        $input = $request->all();
+        $input['password'] = Hash::make($input['password']);
+        $input['invest_percent'] = AppSetting::getDefaultPercentInvest();
+
+        $user = User::create($input);
+        $user->assignRole('investor');
+
+        return redirect()->route('investors.index')
+            ->with('success','Новый инвестор успешно создан');
     }
 
     /**

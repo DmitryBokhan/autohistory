@@ -48,6 +48,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
 
+    Route::post('/investor_store', [UserController::class, 'investor_store'])->name('user.investor_store');
+
 
     Route::resource('projects', ProjectController::class);
 

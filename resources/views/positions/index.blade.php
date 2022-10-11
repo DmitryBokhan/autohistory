@@ -34,7 +34,7 @@
                                     <th>Тип КПП</th>
                                     <th>Год выпуска</th>
                                     <th>Гос. номер</th>
-                                    <th>Стоимость авто</th>
+                                    <th>Сумма покупки позиции</th>
                                     <th></th>
                                 </tr>
                                 @foreach ($positions_prepare as $position)
@@ -69,7 +69,10 @@
                                     <th>Тип КПП</th>
                                     <th>Год выпуска</th>
                                     <th>Гос. номер</th>
-                                    <th>Стоимость авто</th>
+                                    <th>Сумма покупки позиции</th>
+                                    <th>Сумма доставки (план)</th>
+                                    <th>Сумма подготовки (план)</th>
+                                    <th>Сумма продажи (план)</th>
                                     <th></th>
                                 </tr>
                                 @foreach ($positions_sale as $position)
@@ -83,7 +86,10 @@
                                         <td>{{ $position->car->transmission }}</td>
                                         <td>{{ $position->year }}</td>
                                         <td>{{ $position->gos_number }}</td>
-                                        <td>{{ $position->purchase_cost }}</td>
+                                        <td data-sum="">{{ $position->purchase_cost }}</td>
+                                        <td data-sum="">{{ $position->delivery_cost_plan }}</td>
+                                        <td data-sum="">{{ $position->additional_cost_plan }}</td>
+                                        <td><strong data-sum="">{{ $position->sale_cost_plan }}</strong></td>
                                         <td class="text-center">
                                             <a class="btn btn-warning btn-sm" href="{{route('position_info', $position->id)}}">ОТКРЫТЬ</a>
                                         </td>
@@ -104,7 +110,10 @@
                                     <th>Тип КПП</th>
                                     <th>Год выпуска</th>
                                     <th>Гос. номер</th>
-                                    <th>Стоимость авто</th>
+                                    <th>Сумма покупки позиции</th>
+                                    <th>Сумма доставки (факт)</th>
+                                    <th>Сумма подготовки (факт)</th>
+                                    <th>Сумма продажи (факт)</th>
                                     <th></th>
                                 </tr>
                                 @foreach ($positions_archive as $position)
@@ -118,7 +127,10 @@
                                         <td>{{ $position->car->transmission }}</td>
                                         <td>{{ $position->year }}</td>
                                         <td>{{ $position->gos_number }}</td>
-                                        <td>{{ $position->purchase_cost }}</td>
+                                        <td data-sum="">{{ $position->purchase_cost }}</td>
+                                        <td data-sum="">{{ $position->delivery_cost_fact }}</td>
+                                        <td data-sum="">{{ $position->additional_cost_fact }}</td>
+                                        <td><strong data-sum="">{{ $position->sale_cost_fact }}</strong></td>
                                         <td class="text-center">
                                             <a class="btn btn-warning btn-sm" href="{{route('position_info', $position->id)}}">ОТКРЫТЬ</a>
                                         </td>
