@@ -29,7 +29,6 @@
                         <h3 class="card-title">Инвестиция в позицию: <b>{{$position->car->mark . " ". $position->car->model . " | гос.номер: " . $position->gos_number}}</b></h3>
                     </div>
                     <input type="hidden" name="position_id" value="{{$position->id}}">
-
                     <div class="row">
                         <div class="col-md-6 ml-3 mt-2 md-2 mr-2">
                             <p class="text-center">
@@ -75,13 +74,13 @@
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12">
-                                        <div class="form-group">
-                                            <label for="pay_purposes">Цель инвестиции</label>
-                                            <select class="form-control" id="pay_purposes" name="pay_purposes" aria-label="Цель инвестиции">
-                                                @foreach ($pay_purposes as $pay_purpose)
-                                                    <option value="{{ $pay_purpose->id }}">{{ $pay_purpose->name }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div><label>Цель инвестиции</label></div>
+                                        <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
+                                            @foreach ($pay_purposes as $pay_purpose)
+                                            <label class="btn btn-warning">
+                                                <input type="radio" name="pay_purposes" value="{{ $pay_purpose->id }}"> {{ $pay_purpose->name }}
+                                            </label>
+                                            @endforeach
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-12 col-md-12">
@@ -154,7 +153,6 @@
                 $('#sum_fixed_block').attr("hidden", true);
             }
 
-
             //округляет число
             function roundPlus(x, n) { //x - число, n - количество знаков
                 if(isNaN(x) || isNaN(n)) return 0;
@@ -162,23 +160,17 @@
                 return Math.round(x*m)/m;
             }
             const PROFIT_POSITION = Number({{$position->CalcProfit()}});
-            const PROFIT_OWN = Number({{$position->CalcSumProfitOwn()}});
             const SUM_INVEST = Number({{App\Models\Account::getSumAccountsInPositionById($position->id)}}); //сумма всех ивсестированных средств
 
             var input_sum = document.getElementById('sum');
             var input_sum_fixed = document.getElementById('sum_fixed');
-
-            var profit_own = document.getElementById('profit_own');
-
-
-
             var investor_id = document.getElementById('investors'); // value это id ивестора
 
             //расчет инвестиций
             function CalcProfit(){
                 var investor_percent = document.getElementById('id-'+ investor_id.value).dataset.percent / 100;
                 var scheme = document.getElementById('schemes').value; //схема
-                var pay_purposes = document.getElementById('pay_purposes').value; //цель
+               // var pay_purposes = document.getElementById('pay_purposes').value; //цель
                 switch (scheme) {
                     case("1"): //расчет при схеме "% от вклада"
                         var sum = Number(input_sum.value.split(' ').join('')); // удаляем пробелы из строки и приводим к числовому типу
@@ -220,9 +212,6 @@
                 CalcProfit();
             }
 
-            document.getElementById('pay_purposes').onchange = function() {
-                CalcProfit();
-            }
 
             //отслеживаем смену схемы инвестирования
             var schemes = document.getElementById('schemes');

@@ -21,6 +21,18 @@ class StoreRequest extends FormRequest
     }
 
     /**
+     * Получить сообщения об ошибках для определенных правил валидации.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'pay_purposes.required' => 'Выберите цель инвестииции',
+        ];
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -29,16 +41,21 @@ class StoreRequest extends FormRequest
     {
 
         if($request->pay_purposes == 1) {
-            if($request->schemes == 3 ){
+            if ($request->schemes == 3) {
                 return [
                     'sum' => ['required', new MaxCostInvestOnPurchasePosition, new InvestorHasMoney],
                     'invest_fixed' => 'required'
                 ];
-            }else{
+            } else {
                 return [
                     'sum' => ['required', new MaxCostInvestOnPurchasePosition, new InvestorHasMoney],
                 ];
             }
+        }else if($request->pay_purposes == null){
+            return [
+                'pay_purposes' => 'required'
+            ];
+
         }else{
             if($request->schemes == 3 ){
                 return [

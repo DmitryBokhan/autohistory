@@ -24,7 +24,7 @@
   <!-- Daterange picker -->
   <link rel="stylesheet" href="{{ asset('/dashboard/plugins/daterangepicker/daterangepicker.css') }}">
   <!-- стили попапа -->
-  <link href="{{ asset('/dashboard/dist/css/colorbox.css') }}" rel="stylesheet">
+{{--  <link href="{{ asset('/dashboard/dist/css/colorbox.css') }}" rel="stylesheet">--}}
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">

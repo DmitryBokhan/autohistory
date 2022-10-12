@@ -47,7 +47,7 @@ class InvestController extends Controller
 
 
         $pay_purpose_id = $request->pay_purposes;
-
+        //dd($request);
         Account::addInvestPosition($user_id, $sum, $position_id, $invest_scheme_id, $invest_percent, $invest_fixed, $pay_purpose_id, $comment);
         return redirect("/position_info/$position_id");
     }
