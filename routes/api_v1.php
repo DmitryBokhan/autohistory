@@ -74,6 +74,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //Раздел Позиции
     Route::get('/position/{id}', [ApiPositionController::class, 'show']); //данные о позиции (детальная информация)
     Route::get('/position/{status}/list', [ApiPositionController::class, 'index']); //status: prepare, sale, archive | получить список позиций определенного статуса
+    Route::post('/position/store', [ApiPositionController::class, 'store']);//добавить новую позицию
 
     //Запросы в базу автомобилей (carsbase)
     Route::prefix('carsbase')->group(function(){
