@@ -50,8 +50,6 @@ class CalculateInvestmentService
         $this->position->setDeliveryCostFact($this->position->getSumInvestDelivery());//сохраняем в БД фактическую сумму затрат на доставку позиции
         $this->position->setSaleDate(); //сохраняем дату продажи
 
-
-
         foreach ($accounts as $account){
             // Зачисляем обратно инвестированные средства на счет инвестора
             $account->addAccount($account->user_id, abs($account->sum), 2, $this->position->id,  $account->invest_scheme_id, null, null, $account->pay_purpose_id);

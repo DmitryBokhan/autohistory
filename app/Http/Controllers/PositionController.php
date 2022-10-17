@@ -16,7 +16,7 @@ class PositionController extends Controller
     /**
      * Отобразить список ресурсов.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function index(Request $request)
     {
@@ -50,7 +50,7 @@ class PositionController extends Controller
    /**
      * Отобразить форму для создания нового ресурса.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function create()
     {
@@ -58,7 +58,7 @@ class PositionController extends Controller
         $countries = DB::table('countries')->get();
         $regions = DB::table('regions')->where('country_id', 3159)->get();
         $cities = DB::table('cities')->where('region_id', 4052)->get();
-        return view('positions.create', ['marks' => $marks, 'countries' => $countries, 'regions' => $regions,  'cities' => $cities]);
+        return view('positions.create', compact('marks', 'countries', 'regions', 'cities'));
     }
 
 
@@ -205,7 +205,7 @@ class PositionController extends Controller
      * @param Request $request
      * @return void
      */
-    public function info(Request $request,$position_id)
+    public function info(Request $request, $position_id)
     {
         $sale_cost_fact = str_replace(" ", "", $request->sale_cost_fact);
         $position = Position::find($position_id);
