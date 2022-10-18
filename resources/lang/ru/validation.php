@@ -171,7 +171,7 @@ return [
         'purchase_date' => 'Дата покупки',
         'purchase_cost' => 'Стоимость автомобиля',
         'sale_cost_plan' => 'Планируемая стоимость продажи',
-        'preparation_start' => 'Планируемая стоимость продажи',
+        'preparation_start' => 'Дата начала подготовки',
         'preparation_plan' => 'Планируемое время подготовки',
         'additional_cost_plan' => 'Планируемые расходы на подготовку',
         'delivery_cost_plan' => 'Планируемые расходы на доставку',

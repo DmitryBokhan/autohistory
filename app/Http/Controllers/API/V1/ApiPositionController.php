@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\Api\V1\Position\StoreRequest;
+use App\Http\Requests\Api\V1\Position\UpdateRequest;
 use App\Http\Resources\Api\V1\PositionCollection;
 use App\Http\Resources\Api\V1\PositionDetailResource;
 use App\Http\Controllers\Controller;
@@ -85,8 +86,6 @@ class ApiPositionController extends Controller
         } catch(\Illuminate\Database\QueryException $ex){
             //если прилетело исключение - отдаем ошибку
             return response()->json(['error' => 'Произошла ошибка при сохранении данных'])->setStatusCode(422);
-
-
         }
         return response()->json(['message' => 'Позиция успешно создана'])->setStatusCode(201);
     }
@@ -109,9 +108,52 @@ class ApiPositionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
-        //
+        //валидация вынесена в UpdateRequest
+
+        if($request->engine_type == "электро") {
+            $car_id = DB::table('carsbase')
+                ->distinct()
+                ->where('mark', $request->mark)
+                ->where('model', $request->model)
+                ->where('engine-type', $request->engine_type)
+                ->pluck('id')
+                ->first();
+
+        }else{
+            $car_id = DB::table('carsbase')
+                ->distinct()
+                ->where('mark', $request->mark)
+                ->where('model', $request->model)
+                ->where('engine-type', $request->engine_type)
+                ->where('volume', $request->engine_volume)
+                ->where('transmission', $request->transmission)
+                ->pluck('id')
+                ->first();
+        }
+
+        try{
+            Position::find($id)->update([
+                'car_id' => $car_id,
+                'year' => (int)$request->year,
+                'gos_number' => $request->gos_number,
+                'purchase_date' => $request->purchase_date,
+                'purchase_cost' => (int)str_replace(" ", "",$request->purchase_cost),
+                'sale_cost_plan' => (int)str_replace(" ", "", $request->sale_cost_plan),
+                'city_id' => (int)$request->city_id,
+                'preparation_start' => $request->preparation_start,
+                'preparation_plan' => (int)$request->preparation_plan,
+                'additional_cost_plan' =>  (int)str_replace(" ", "", $request->additional_cost_plan),
+                'delivery_cost_plan' => (int)str_replace(" ", "", $request->delivery_cost_plan),
+                'comment' => $request->comment
+            ]);
+
+        } catch(\Illuminate\Database\QueryException $ex){
+            //если прилетело исключение - отдаем ошибку
+            return response()->json(['error' => 'Произошла ошибка при обновлении данных'])->setStatusCode(422);
+        }
+        return response()->json(['message' => 'Данные позиции успешно обновлены'])->setStatusCode(200);
     }
 
     /**

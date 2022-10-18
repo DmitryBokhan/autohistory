@@ -148,7 +148,7 @@ class PositionController extends Controller
         return view('positions.edit', compact(['position', 'marks', 'models', 'engine_types', 'engine_volumes', 'transmissions', 'countries', 'regions', 'cities']));
     }
 
-    public function update(UpdateRequest $request, $position)
+    public function update(UpdateRequest $request, $id)
     {
 
         //валидация вынесена в UpdateRequest
@@ -175,7 +175,7 @@ class PositionController extends Controller
         }
 
         try{
-        Position::find($position)->update([
+        Position::find($id)->update([
             'car_id' => $car_id,
             'year' => $request->year,
             'gos_number' => $request->gos_number,
@@ -196,7 +196,7 @@ class PositionController extends Controller
                 ->withInput()
                 ->withErrors(['error' => 'Ошибка запонения формы']);
         }
-        return redirect()->route("position_info", $position)
+        return redirect()->route("position_info", $id)
             ->with('success','Данные позиции успешно обновлены');
     }
 
