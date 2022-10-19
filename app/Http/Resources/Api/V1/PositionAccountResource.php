@@ -10,6 +10,8 @@ class PositionAccountResource extends JsonResource
 
 
     /**
+     * Получить массив данных для списка инвестиций в позиции
+     * Используется для заполнения списка инвестиций в позиции
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request

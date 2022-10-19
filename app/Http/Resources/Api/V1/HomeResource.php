@@ -10,7 +10,7 @@ class HomeResource extends JsonResource
     //public static $wrap = 'home';
 
     /**
-     * Transform the resource into an array.
+     * Вернет данные для первого экрана приложения
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable

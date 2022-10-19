@@ -4,6 +4,7 @@ use App\Http\Controllers\API\V1\ApiCarsBaseController;
 use App\Http\Controllers\API\V1\ApiCityController;
 use App\Http\Controllers\API\V1\ApiHomeController;
 use App\Http\Controllers\Api\V1\ApiInvestorController;
+use App\Http\Controllers\Api\V1\ApiInvestController;
 use App\Http\Controllers\Api\V1\ApiPositionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -76,6 +77,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/position/{status}/list', [ApiPositionController::class, 'index']); //status: prepare, sale, archive | получить список позиций определенного статуса
     Route::post('/position/store', [ApiPositionController::class, 'store']);//добавить новую позицию
     Route::put('/position/{id}', [ApiPositionController::class, 'update']);//бновить данные позиции
+
+    //Инвестиции в позицию
+    Route::get('/invest_position/{id}', [ApiInvestController::class, 'index']); //данный для формы "Инвестиция в позицию"
+    
 
     //Запросы в базу автомобилей (carsbase)
     Route::prefix('carsbase')->group(function(){

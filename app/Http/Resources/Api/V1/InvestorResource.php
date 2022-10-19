@@ -8,7 +8,7 @@ use App\Models\Account;
 class InvestorResource extends JsonResource
 {
     /**
-     * Класс для вывода информации для раздела Инвесторы->Инвесторы (список инвесторов)
+     * Класс для вывода информации в раздел Инвесторы->Инвесторы (список инвесторов)
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request

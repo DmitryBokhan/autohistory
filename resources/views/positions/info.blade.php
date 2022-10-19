@@ -300,7 +300,7 @@
                                 @if($position->position_status_id == 1)
                                     <form action="{{ route('invest_position.account_delete', $account->id) }}" method="POST">
                                         @csrf
-                                        <button class="btn bg-gradient-danger btn-outline-secondary btn-sm" type="submit"><i class="fas fa-trash"></i></button>
+                                        <button class="btn bg-gradient-danger btn-outline-secondary btn-sm delete-btn" type="submit"><i class="fas fa-trash"></i></button>
                                     </form>
                                 @endif
                             </td>

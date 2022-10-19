@@ -44,4 +44,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $appends = ['balance_free'];
+
+
+    /**
+     * Accessors
+     * баланс свободных средств пользователя
+     * @return float
+     */
+    public function getBalanceFreeAttribute() {
+        return Account::getBalance($this->id);
+    }
 }
