@@ -16,12 +16,18 @@ class PositionDetailResource extends JsonResource
     public function toArray($request)
     {
         //return parent::toArray($request);
+        if(empty($this->id)){
+           return ["error" => "Позиция не найдена"];
+        }
+
+
 
         if(in_array($this->position_status_id,[1,2])){
             $accounts = new PositionAccountCollection(Account::where('position_id', $this->id)->where('status', 'OPEN')->get());
         }elseif($this->position_status_id == 3){
             $accounts = new PositionAccountCollection(Account::where('position_id', $this->id)->where('status', 'CLOSED')->get());
         }
+
 
         return [
             "id" => $this->id,
@@ -55,7 +61,9 @@ class PositionDetailResource extends JsonResource
             "delivery_cost_fact" => $this->delivery_cost_fact,
             "comment" => $this->comment,
             'investments' => $accounts,
-            ];
+        ];
+
+
 
     }
 }

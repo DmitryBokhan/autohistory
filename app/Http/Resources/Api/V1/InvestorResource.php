@@ -27,7 +27,7 @@ class InvestorResource extends JsonResource
             'all_money' => Account::getAllMoney($this->id),
             'free_money' => Account::getBalance($this->id),
             'invest_money' => Account::getBalanceInvestOpen($this->id),
-            'is_active' => $this->is_active,
+            'is_active' => $this->is_active
         ];
     }
 }

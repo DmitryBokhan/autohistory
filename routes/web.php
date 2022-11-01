@@ -48,10 +48,16 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
 
+    //форма создания нового инвестора
+    Route::get('/create_investor', function () {
+        return view('investors.create');
+    });
+
+    //сохранить инвестора
     Route::post('/investor_store', [UserController::class, 'investor_store'])->name('user.investor_store');
 
 
-    Route::resource('projects', ProjectController::class);
+    Route::resource('projects', ProjectController::class);// для тестов, потом удалить!
 
     Route::get('/create_position', [PositionController::class, 'create'])->name('create_position');
     Route::post('/create_position', [PositionController::class, 'store'])->name('create_position.store');
@@ -102,22 +108,27 @@ Route::group(['middleware' => ['auth']], function() {
 
 });
 
-
-
-
 Route::post('/cars_ajax', [PositionController::class, 'cars_ajax']);
 Route::post('/city_ajax', [PositionController::class, 'city_ajax']);
 
+
+
+
 //временные маршруты для тестирования
-Route::get('/create_investor', function () {
-    return view('investors.create');
-});
+
 
 
 Route::get("/test", function(){
 
-    $position = App\Models\Position::find(4);
-    dd($position->user->name);
+    //dd(new App\Http\Resources\Api\V1\InvestorCollection(User::role('investor')->get()));
+
+   // dd(User::role('investor')->get());
+
+
+   // dd(ApiInvestorController::getInvestors());
+
+    //$position = App\Models\Position::get();
+    //dd($position);
 
    // dd(User::role('investor')->get());
     $user = auth()->user();

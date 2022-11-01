@@ -1,15 +1,15 @@
 <?php
 
-use App\Http\Controllers\API\V1\ApiCarsBaseController;
-use App\Http\Controllers\API\V1\ApiCityController;
-use App\Http\Controllers\API\V1\ApiHomeController;
 use App\Http\Controllers\Api\V1\ApiInvestorController;
+use App\Http\Controllers\Api\V1\ApiCarsBaseController;
+use App\Http\Controllers\Api\V1\ApiCityController;
+use App\Http\Controllers\Api\V1\ApiHomeController;
 use App\Http\Controllers\Api\V1\ApiInvestController;
 use App\Http\Controllers\Api\V1\ApiPositionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\API\V1\ApiProjectController;
+use App\Http\Controllers\Api\V1\ApiProjectController;
 
 
 
@@ -69,8 +69,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/home', [ApiHomeController::class, 'index']); //Данные для главного экрана приложения
 
     //Раздел ИНВЕСТОРЫ
-    Route::get('/investors/{id}', [ApiInvestorController::class, 'getInvestorById']); //Инф-я о конкретном инвесторе (пока маршрут нигде не используется)
     Route::get('/investors', [ApiInvestorController::class, 'getInvestors']); //Инф-я о всех инвесторах для раздела Инвесторы->Инвесторы (список инвесторов)
+    Route::get('/investors/{id}', [ApiInvestorController::class, 'getInvestorById']); //Инф-я о конкретном инвесторе (пока маршрут нигде не используется)
+    Route::post('/investors', [ApiInvestorController::class, 'store']); //Добавить(сохранить) нового инвестора
 
     //Раздел Позиции
     Route::get('/position/{id}', [ApiPositionController::class, 'show']); //данные о позиции (детальная информация)
@@ -79,8 +80,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/position/{id}', [ApiPositionController::class, 'update']);//бновить данные позиции
 
     //Инвестиции в позицию
-    Route::get('/invest_position/{id}', [ApiInvestController::class, 'index']); //данный для формы "Инвестиция в позицию"
-    
+    Route::get('/invest_position/{id}', [ApiInvestController::class, 'index']); //данные для формы "Инвестиция в позицию"
+    Route::post('/invest_position', [ApiInvestController::class, 'store']); //Добавление(сохранение) инвестиции
+
+
 
     //Запросы в базу автомобилей (carsbase)
     Route::prefix('carsbase')->group(function(){

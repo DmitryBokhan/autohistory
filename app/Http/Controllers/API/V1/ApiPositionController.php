@@ -18,11 +18,10 @@ class ApiPositionController extends Controller
      * Статус передается в маршруте
      * Возможные статусы: prepare, sale, archive
      *
-     * @return \Illuminate\Http\Response
+     * @return PositionCollection|array
      */
     public function index(Request $request)
     {
-
         switch ($request->status){
             case ('prepare'):
                 return new PositionCollection(Position::where('position_status_id', 1)->get());
@@ -31,7 +30,7 @@ class ApiPositionController extends Controller
             case ('archive'):
                 return new PositionCollection(Position::where('position_status_id', 3)->get());
             default:
-                return ['error' => 'Ошибка. Статус не определен'];
+                return array('error' => 'Ошибка. Статус не определен');
         }
     }
 
@@ -39,11 +38,13 @@ class ApiPositionController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\Api\V1\Position\StoreRequest $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|object
      */
     public function store(StoreRequest $request)
     {
-        $user_id = auth()->user()->id;
+        if (!empty(auth()->user()->id)) {
+            $user_id = auth()->user()->id;
+        }
 
         if($request->engine_type == "электро") {
             $car_id = DB::table('carsbase')
@@ -85,16 +86,16 @@ class ApiPositionController extends Controller
             ]);
         } catch(\Illuminate\Database\QueryException $ex){
             //если прилетело исключение - отдаем ошибку
-            return response()->json(['error' => 'Произошла ошибка при сохранении данных'])->setStatusCode(422);
+            return response()->json(array('error' => 'Произошла ошибка при сохранении данных'))->setStatusCode(422);
         }
-        return response()->json(['message' => 'Позиция успешно создана'])->setStatusCode(201);
+        return response()->json(array('message' => 'Позиция успешно создана'))->setStatusCode(201);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return PositionDetailResource
      */
     public function show($id)
     {
@@ -106,7 +107,7 @@ class ApiPositionController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|object
      */
     public function update(UpdateRequest $request, $id)
     {
@@ -151,9 +152,9 @@ class ApiPositionController extends Controller
 
         } catch(\Illuminate\Database\QueryException $ex){
             //если прилетело исключение - отдаем ошибку
-            return response()->json(['error' => 'Произошла ошибка при обновлении данных'])->setStatusCode(422);
+            return response()->json(array('error' => 'Произошла ошибка при обновлении данных'))->setStatusCode(422);
         }
-        return response()->json(['message' => 'Данные позиции успешно обновлены'])->setStatusCode(200);
+        return response()->json(array('message' => 'Данные позиции успешно обновлены'))->setStatusCode(200);
     }
 
     /**

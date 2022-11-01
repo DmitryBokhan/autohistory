@@ -44,10 +44,7 @@ class InvestController extends Controller
         $invest_fixed = $invest_scheme_id == 3 ? str_replace(" ", "", $request->invest_fixed) : null;
         $comment = $request->comment;
         $sum = str_replace(" ", "", $sum);
-
-
         $pay_purpose_id = $request->pay_purposes;
-        //dd($request);
         Account::addInvestPosition($user_id, $sum, $position_id, $invest_scheme_id, $invest_percent, $invest_fixed, $pay_purpose_id, $comment);
         return redirect("/position_info/$position_id");
     }

@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V1\InvestorResource;
 use App\Http\Resources\Api\V1\InvestorCollection;
+use App\Models\AppSetting;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\Account;
+use Illuminate\Support\Facades\Hash;
 
 class ApiInvestorController extends Controller
 {
@@ -44,11 +45,30 @@ class ApiInvestorController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse|object
      */
     public function store(Request $request)
     {
-        //
+        //return $request;
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|same:password_confirmation',
+        ]);
+
+        $input = $request->all();
+        $input['password'] = Hash::make($input['password']);
+        $input['invest_percent'] = AppSetting::getDefaultPercentInvest();
+
+        try{
+            $user = User::create($input);
+        }catch(\Illuminate\Database\QueryException $ex) {
+            return response()->json(array('error' => 'Произошла ошибка при создании инвестора'))->setStatusCode(403);
+
+        }
+        $user->assignRole('investor');
+
+        return response()->json(array('message' => 'Инвестор успешно создан'))->setStatusCode(201);
     }
 
     /**
