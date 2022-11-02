@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Invest\StoreRequest;
 use App\Http\Resources\Api\V1\InvestResource;
+use App\Http\Resources\Api\V1\PositionAccountCollection;
 use App\Models\Account;
 use App\Models\InvestScheme;
 use App\Models\PayPurpose;
@@ -75,6 +76,30 @@ class ApiInvestController extends Controller
         }
 
         return response()->json(array('message' => 'Инвестиция успешно добавлена'))->setStatusCode(201);
+    }
+
+
+    /**
+     * Получить список всех инвестиций в позицию
+     * @param Request $request
+     * @return PositionAccountCollection|\Illuminate\Http\JsonResponse|object
+     */
+    public function getInvestByPositionId(Request $request)
+    {
+
+        $position = Position::find($request->id);
+
+        if(!empty($position)){
+            if(in_array($position->position_status_id,[1,2])){
+                $accounts = new PositionAccountCollection(Account::where('position_id', $request->id)->where('status', 'OPEN')->get());
+            }elseif($position->position_status_id == 3){
+                $accounts = new PositionAccountCollection(Account::where('position_id', $request->id)->where('status', 'CLOSED')->get());
+            }
+        }else{
+            return response()->json(array('error' => "Позиции с ID:{$request->id} не найдено"))->setStatusCode(422);
+        }
+
+        return $accounts;
     }
 
     /**

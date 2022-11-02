@@ -81,7 +81,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //Инвестиции в позицию
     Route::get('/invest_position/{id}', [ApiInvestController::class, 'index']); //данные для формы "Инвестиция в позицию"
-    //TODO сделать вывод списка всех инвестиций в позиции
+    Route::get('invest_position/{id}/list' , [ApiInvestController::class, 'getInvestByPositionId']); //Список всех инвестиций в позиции
     Route::post('/invest_position', [ApiInvestController::class, 'store']); //Добавление(сохранение) инвестиции
     Route::post('/invest_position/delete',[ApiInvestController::class, 'destroy']);// удалить инвестицию из позиуии
 
