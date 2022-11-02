@@ -52,7 +52,7 @@ class ApiInvestController extends Controller
 
         if($position->position_status_id == 2){
             return response()->json(array('error' => 'Для добавления инвестиции, позиция должна находиться в статусе "Подготовка"'))->setStatusCode(200);
-        }elseif($position->position_status_id == 2){
+        }elseif($position->position_status_id == 3){
             return response()->json(array('error' => 'Операция отклонена. Целевая позиция находится в статусе "Архив".'))->setStatusCode(200);
         }
 
@@ -103,11 +103,29 @@ class ApiInvestController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse|object
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+
+        $account = Account::find($request->account_id);
+
+        $position = Position::find($account->position_id);
+
+        if($position->position_status_id == 2){ //если позиция в продаже
+            return response()->json(array('error' => 'Для удаления инвестиции, позиция должна находиться в статусе "Подготовка"'))->setStatusCode(200);
+        }elseif($position->position_status_id == 3){ //если позиция в архиве
+            return response()->json(array('error' => 'Операция отклонена. Позиция назодится в статусе "Архив".'))->setStatusCode(200);
+        }
+
+        if($account->status == "OPEN"){ //счет имеет статус OPEN
+            Account::deleteAccount($request->account_id);
+            return response()->json(array('message' => 'Инвестиция успешно удаленна'))->setStatusCode(201);
+        }else{
+            return response()->json(array('error' => 'Операция отклонена. Инвестиуия не является открытой'))->setStatusCode(200);
+        }
+
+
     }
 }
