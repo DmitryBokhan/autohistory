@@ -12,6 +12,7 @@ use App\Models\PayPurpose;
 use App\Models\Position;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ApiInvestController extends Controller
 {
@@ -30,8 +31,10 @@ class ApiInvestController extends Controller
         }else{
             $pay_purposes = PayPurpose::get()->makeHidden(['created_at', 'updated_at']);
         }
-
-        $investors = User::where('is_active', true)->get()->makeHidden(['created_at', 'updated_at', 'email', 'email_verified_at', 'is_active']);
+        $investors = User::role('investor')->where('is_active', true)->get()->makeHidden(['created_at', 'updated_at', 'email', 'email_verified_at', 'is_active']); //получаем всех инвесторов
+        $current_user = User::where('id', Auth::User()->id)->where('is_active', true)->get()->makeHidden(['created_at', 'updated_at', 'email', 'email_verified_at', 'is_active']); //получаем текущего пользователя
+        $investors = $current_user->merge($investors); // объединяем текущего пользователя и всех инвесторов
+       // $investors = User::where('is_active', true)->get()->makeHidden(['created_at', 'updated_at', 'email', 'email_verified_at', 'is_active']);
 
         $invest_schemes = InvestScheme::get()->makeHidden(['created_at', 'updated_at']);
 
