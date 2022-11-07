@@ -9,6 +9,7 @@ use App\Models\PayPurpose;
 use App\Models\Position;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class InvestController extends Controller
 {
@@ -23,8 +24,9 @@ class InvestController extends Controller
             $pay_purposes = PayPurpose::get();
         }
 
-        $investors = User::where('is_active', true)->get();
-
+        $investors = User::role('investor')->where('is_active', true)->get(); //получаем всех инвесторов
+        $current_user = User::where('id', Auth::User()->id)->where('is_active', true)->get(); //получаем текущего пользователя
+        $investors = $current_user->merge($investors); // объединяем текущего пользователя и всех инвесторов
         $invest_schemes = InvestScheme::get();
 
         return view('finance.invest', compact('position', 'pay_purposes', 'investors', 'invest_schemes'));
