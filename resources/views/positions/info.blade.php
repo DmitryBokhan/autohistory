@@ -298,10 +298,12 @@
                             @endif
                             <td>
                                 @if($position->position_status_id == 1)
+                                    @can('invest-delete')
                                     <form action="{{ route('invest_position.account_delete', $account->id) }}" method="POST">
                                         @csrf
                                         <button class="btn bg-gradient-danger btn-outline-secondary btn-sm delete-btn" type="submit"><i class="fas fa-trash"></i></button>
                                     </form>
+                                    @endcan
                                 @endif
                             </td>
                         </tr>
@@ -312,11 +314,13 @@
                     <p class="text-danger">Еще ни один инвестор не решился на это. Будь первым! </p>
                 @endif
                 @if($position->position_status_id == 1)
+                    @can('invest-add')
                     <div class="row mb-4">
                         <div class="col-12 text-left">
                             <a class="btn bg-gradient-warning btn-outline-secondary btn-sm" href="{{route('invest_position.create', $position->id)}}">+ Добавить инвестора</a>
                         </div>
                     </div>
+                    @endcan
                 @endif
             </div>
         </div>
@@ -358,6 +362,10 @@
                             @else
                                 <td data-profit="">{{$position->CalcSumProfitOwn($sale_cost_fact)}}</td>
                             @endif
+                        </tr>
+                        <tr>
+                            <th>Автор позиции:</th>
+                            <td><b>{{$position->user->name}}</b></td>
                         </tr>
                         </tbody></table>
                 </div>

@@ -13,8 +13,17 @@ use App\Http\Services\CalculateInvestmentService;
 
 class PositionController extends Controller
 {
+
+    function __construct()
+    {
+        $this->middleware('permission:position-list|position-create|position-edit|position-edit-all', ['only' => ['index']]);
+        //$this->middleware('permission:project-create', ['only' => ['create','store']]);
+        //$this->middleware('permission:project-edit', ['only' => ['edit','update']]);
+        //$this->middleware('permission:project-delete', ['only' => ['destroy']]);
+    }
+
     /**
-     * Отобразить список ресурсов.
+     * Отобразить список позиций
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
@@ -48,7 +57,7 @@ class PositionController extends Controller
     }
 
    /**
-     * Отобразить форму для создания нового ресурса.
+     * Отобразить форму для создания новой позиции.
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
@@ -120,6 +129,11 @@ class PositionController extends Controller
         return redirect()->route('position_info', $position->id);
     }
 
+    /**
+     * Редактирование позиции (форма)
+     * @param $position_id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function edit($position_id)
     {
         $position = Position::find($position_id);
@@ -148,6 +162,12 @@ class PositionController extends Controller
         return view('positions.edit', compact(['position', 'marks', 'models', 'engine_types', 'engine_volumes', 'transmissions', 'countries', 'regions', 'cities']));
     }
 
+    /**
+     * Обновить позицию после редактирования
+     * @param UpdateRequest $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(UpdateRequest $request, $id)
     {
 
